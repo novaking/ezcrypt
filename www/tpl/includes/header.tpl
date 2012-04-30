@@ -9,6 +9,7 @@
 		<meta http-equiv="cache-control" content="no-cache" />
 		<meta http-equiv="pragma" content="no-cache" />
 		<link rel="stylesheet" href="/css/styles.min.css" />
+		<link rel="shortcut icon" href="/favicon.ico" />
 		
 		<!--[if gte IE 9]>
 		<style type="text/css">
@@ -17,6 +18,8 @@
 		<![endif]-->
 	
 		<script type="text/javascript">
+			var lib = '<?php echo ( !empty( $pastes ) ) ? $pastes->get_crypto() : 'CRYPTO_JS'; ?>';
+			
 			// holder object to store jquery commands until jquery is loaded up
 			window.$ = ( function() {
 				var q = [], f = function( cb ) {
@@ -44,11 +47,11 @@
 			</div>
 			<div id="menu">
 				<a href="/">Home</a>
-				<span class="small">&nbsp;&diams;&nbsp;</span>
+				<span class="small">&nbsp;</span>
 				<a href="/about">About</a>
-				<span class="small">&nbsp;&diams;&nbsp;</span>
+				<span class="small">&nbsp;</span>
 				<a href="mailto:contact@ezcrypt.it">Contact</a>
-				<span class="small">&nbsp;&diams;&nbsp;</span>
-				<a href="https://github.com/novaking/ezcrypt" target="_blank">Code</a>
+				<span class="small">&nbsp;</span>
+				<a href="https://github.com/novaking/ezcrypt" target="_blank">Sourcecode</a>
 			</div>
 			<div id="main">

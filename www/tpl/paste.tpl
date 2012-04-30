@@ -10,12 +10,10 @@
 				ez = this;
 	
 				var key = window.location.hash.substring( 1 );
-				var data = $( '#result' ).val();
+				var data = $( '#data' ).val();
 				if( key != '' && data != '' )
 				{
-					editor.setValue( decrypt( window.location.hash.substring( 1 ), $( '#result' ).val() ) );
-					
-					$( '#wrap' ).bind( 'click', function() { var checked = $( '#wrap' ).is( ':checked' ); if( checked == 1 ) { editor.setOption( 'lineWrapping', true ); } else { editor.setOption( 'lineWrapping', false ); } } );
+					editor.setValue( decrypt( window.location.hash.substring( 1 ), data ) );
 					$( '#wrapholder' ).show();
 				}
 				else
@@ -60,15 +58,45 @@ JS;
 	<div id="insertkey">
 		Enter key to decrypt:&nbsp;
 		<input type="text" id="typekey" style="width: 450px;" autocomplete="off" />&nbsp;
-		<input type="button" value="Decrypt" onclick="window.location = '#' + $( '#typekey' ).val(); editor.setValue( decrypt( $( '#typekey' ).val(), $( '#result' ).val() ) );" />
+		<input type="button" value="Decrypt" onclick="window.location = '#' + $( '#typekey' ).val(); editor.setValue( decrypt( $( '#typekey' ).val(), $( '#data' ).val() ) );" />
 	</div>
 	<input type="hidden" name="syntax" id="syntax" value="<?=$syntax;?>" />
-	<input type="hidden" name="result" id="result" value="<?=$paste;?>" />
+	<input type="hidden" name="data" id="data" value="<?=$paste;?>" />
 	
-	<div id="wrapholder" style="float: right; display: none;">
-		<label for="wrap">Wrap Lines</label> <input type="checkbox" id="wrap" />
+	<div id="newpaste">
+		<div style="position: relative;">
+			<textarea id="text" name="text" spellcheck="false"></textarea>
+			<textarea id="result" name="result" readonly spellcheck="false"></textarea>
+		</div>
+		<div id="options">
+			<acronym title="Expire this paste after the period of time selected">Expire in</acronym>
+			<select id="ttl">
+				<option value="300">five minutes</option>
+				<option value="3600">an hour</option>
+				<option value="86400">a day</option>
+				<option value="604800" selected="selected">a week</option>
+				<option value="2592000">a month</option>
+				<option value="31536000">a year</option>
+				<option value="-1">indefinately</option>
+			</select>
+			&nbsp;|&nbsp;
+			<label for="usepassword"><acronym title="This password is not used to encrypt the paste">Assign password</acronym></label>&nbsp;<input id="usepassword" type="checkbox" name="usepassword" value="1" />
+			<input type="text" id="typepassword" name="password" style="display: none;" />
+			
+			<input type="hidden" id="key" name="key" />
+		 	<input type="submit" id="en" value="Submit" onclick="return submitData();" style="float: right;" />
+		</div>
+	</div>
+	
+	<div id="wrapholder">
+		<a id="new">New</a>
+		<a id="clone">Clone</a>
+		<label class="tool-numbers tool-numbers-on" for="tool-numbers" title="Toggle Numbers"></label> <input type="checkbox" checked="checked" id="tool-numbers" />
+		<label class="tool-wrap" for="tool-wrap" title="Wrap Lines"></label> <input type="checkbox" id="tool-wrap" />
 	</div>
 	<div id="wrap" style="clear: both;"></div>
+	
+	<div id="decrypting" style="position: absolute; left: 40px; margin-top: 5px; z-index: 100; width: 875px; height: 15px; background: url(/css/decrypting.gif) top left no-repeat;"></div>
 	<input type="hidden" id="content" />
 	
 	<div id="execute"></div>

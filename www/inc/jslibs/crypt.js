@@ -10,7 +10,6 @@
  * 
  **/
 ( function( window, undefined ) {
-	try { if( typeof( jQuery ) == 'undefined' ) { throw ''; } } catch( e ) { throw 'ezcrypt depends on jQuery!'; }
 	try { if( typeof( $LAB ) == 'undefined' ) { throw ''; } } catch( e ) { throw 'ezcrypt depends on $LAB!'; }
 	
 	if( typeof( ezcrypt ) == 'undefined' ) { ezcrypt = {}; }

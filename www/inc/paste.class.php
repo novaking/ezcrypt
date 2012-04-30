@@ -169,6 +169,15 @@
 			return false;
 		}
 		
+		function get_crypto()
+		{
+			// default to crypto-js 
+			if( empty( $this->paste ) ) { return 'CRYPTO_JS'; }
+			
+			// return the type of crypto that was used for the paste
+			return $this->paste['crypto'];
+		}
+		
 		function selected_syntax( $syntax )
 		{
 			// determine if syntax is the one selected 

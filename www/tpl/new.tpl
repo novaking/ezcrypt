@@ -43,8 +43,6 @@ N0h5DmJUWq33D/BPdbpoHt0IFesJzsgt5dlXPF/zyFeJvDwlKCe3lqfym2f5fJG3YQRV1YqAtEKm9d9E
 					};
 		
 					$( function() {
-						
-						$( '#key' ).val( generateKey() );
 						editor.setOption( 'readOnly', true );
 						editor.setOption( 'mode', 'application/x-httpd-php' );
 
@@ -54,11 +52,6 @@ N0h5DmJUWq33D/BPdbpoHt0IFesJzsgt5dlXPF/zyFeJvDwlKCe3lqfym2f5fJG3YQRV1YqAtEKm9d9E
 							ez = this;
 							editor.setValue( ez.aes.decrypt( 'MzksNTIsMTU5LDc4LDQ1LDQ1LDEwMSwxMjEsMTY2LDE4LDI4LDE3NSwyMzIsMTU1LDI5LDE1MSw4MCw1MSw1NCwxMTUsMTcsNTgsNjQsMjQxLDI0OSwxNDEsMTk1LDk3LDk0LDcsOSwyNDU=', welcome[lib] ) );
 						} );
-
-						// support ctrl+enter to send paste
-						$( '#text' ).live( 'keydown', function( e ) { if( e.keyCode == 13 && e.ctrlKey ) { $( '#en' ).click(); } } );
-						
-						$( '#usepassword' ).change( function() { if( this.checked ) { $( '#typepassword' ).show(); } else { $( '#typepassword' ).hide(); } } );
 					} );
 				</script>
 				
@@ -121,7 +114,7 @@ N0h5DmJUWq33D/BPdbpoHt0IFesJzsgt5dlXPF/zyFeJvDwlKCe3lqfym2f5fJG3YQRV1YqAtEKm9d9E
 					<textarea id="result" name="result" readonly spellcheck="false"></textarea>
 				</div>
 				
-				<div style="margin-top: 5px;">
+				<div id="options">
 					<acronym title="Expire this paste after the period of time selected">Expire in</acronym>
 					<select id="ttl">
 						<option value="300">five minutes</option>

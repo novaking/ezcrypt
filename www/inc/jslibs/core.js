@@ -10,7 +10,6 @@
 var editor; // syntax highlighter
 var ez; // object holder of ezcrypto library
 var _encrypting = null; // used as flag state to determine if encryption is in mid-progress
-var lib = 'CRYPTO_JS';
 
 // default options for our lazy loader
 $LAB.setGlobalDefaults( {
@@ -34,11 +33,48 @@ $( function() {
 		editor.focus();
 	}
 	
+	$( '#key' ).val( generateKey() );
+	
+	// support ctrl+enter to send paste
+	$( '#text' ).live( 'keydown', function( e ) { if( e.keyCode == 13 && e.ctrlKey ) { $( '#en' ).click(); } } );
+	
+	$( '#usepassword' ).change( function() { if( this.checked ) { $( '#typepassword' ).show(); } else { $( '#typepassword' ).hide(); } } );
+	
 	// when we detect the text has changed we flag the encryption to trigger off 500ms afterwards
 	// if more text gets entered the trigger will continue resetting as not to cause unwanted CPU usage
 	$( '#text' ).bind( 'textchange', function() {
 		if( _encrypting != null ) { clearTimeout( _encrypting ); _encrypting = null; }
-		_encrypting = setTimeout( '$( \'#result\' ).val( ez.aes.encrypt( $( \'#key\' ).val(), $( \'#text\' ).val() ) ); _encrypting = null', 500 );
+		_encrypting = setTimeout( '$( \'#result\' ).val( encrypt( $( \'#key\' ).val(), $( \'#text\' ).val() ) ); _encrypting = null', 500 );
+	} );
+	
+	$( '#new' ).bind( 'click', function() { $( '#text' ).html( '' ); $( '#result' ).val( '' ); $( '#newpaste' ).slideDown(); } );
+	$( '#clone' ).bind( 'click', function() { $( '#text' ).html( editor.getValue() ).trigger( 'textchange' ); $( '#newpaste' ).slideDown(); } );
+	 
+	$( '#tool-wrap' ).bind( 'click', function() {
+		var checked = $( '#tool-wrap' ).is( ':checked' );
+		if( checked == 1 )
+		{
+			$( '.tool-wrap' ).addClass( 'tool-wrap-on' );
+			editor.setOption( 'lineWrapping', true );
+		}
+		else
+		{
+			$( '.tool-wrap' ).removeClass( 'tool-wrap-on' );
+			editor.setOption( 'lineWrapping', false );
+		}
+	} );
+	$( '#tool-numbers' ).bind( 'click', function() {
+		var checked = $( '#tool-numbers' ).is( ':checked' );
+		if( checked == 1 )
+		{
+			$( '.tool-numbers' ).addClass( 'tool-numbers-on' );
+			editor.setOption( 'lineNumbers', true );
+		}
+		else
+		{
+			$( '.tool-numbers' ).removeClass( 'tool-numbers-on' );
+			editor.setOption( 'lineNumbers', false );
+		}
 	} );
 	
 	enableHover();
@@ -100,13 +136,18 @@ function enableHover()
 // simple function wrapper to decryption time can be logged
 function decrypt( cipher, data )
 {
+	// display decrypt buffering image..
+	$( '#decrypting' ).show();
+	// hide key field
 	$( '#insertkey' ).hide();
+	// start timer and decrypt
 	timeDiff.setStartTime();
 	var output = ez.aes.decrypt( cipher, data );
 	var diff = timeDiff.getDiff();
-	
+	// display duration
 	$( '#execute' ).html( 'decryption: ' + diff + 'ms');
 	$( '.cm-s-default' ).parent().show();
+	$( '#decrypting' ).hide();
 	return output;
 }
 
@@ -114,7 +155,7 @@ function decrypt( cipher, data )
 // @todo: add timestamp on encrypting?
 function encrypt( cipher, data )
 {
-	return stringBreak( ez.aes.decrypt( cipher, data ), 96 );
+	return stringBreak( ez.aes.encrypt( cipher, data ), 96 );
 }
 
 // when a password is assigned to a paste
@@ -135,7 +176,7 @@ function requestData( password )
 		cache: false,
 		success: function( json ) {
 			// success, assign the data accordingly
-			$( '#result' ).val( json.data );
+			$( '#data' ).val( json.data );
 			$( '#syntax' ).val( json.syntax );
 			editor.setOption( 'mode', $( '#syntax' ).val() );
 			if( hash == '' )
@@ -149,7 +190,7 @@ function requestData( password )
 			{
 				// decrypt our data
 				$( '#askpassword' ).hide();
-				editor.setValue( decrypt( hash.substring( 1 ), $( '#result' ).val() ) );
+				editor.setValue( decrypt( hash.substring( 1 ), $( '#data' ).val() ) );
 			}
 		},
 		error: function() {
@@ -197,6 +238,8 @@ function submitData()
 	
 	var ttl = $( '#ttl option:selected' ).val();
 	var syntax = $( '#syntax option:selected' ).val();
+	// if syntax is empty, try hidden element incase of clone feature
+	if( typeof( syntax ) == 'undefined' ) { syntax = $( '#syntax' ).val(); }
 	
 	// send submission to server
 	$.ajax( {
