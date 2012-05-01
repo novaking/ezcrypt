@@ -231,9 +231,7 @@ function submitData()
 	if( $( '#usepassword' ).is( ':checked' ) )
 	{
 		// if password is used, let's sha the password before we send it over
-		ezcrypt( lib, function() {
-			password = this.sha( $( '#typepassword' ).val() );
-		} );
+		password = ez.sha( $( '#typepassword' ).val() );
 	}
 	
 	var ttl = $( '#ttl option:selected' ).val();
