@@ -13,6 +13,7 @@
 	class Template
 	{
 		protected $template_vars = array();
+		private $theme = 'default';
 		
 		function __construct()
 		{
@@ -25,15 +26,23 @@
 			$this->template_vars[$name] = $value;
 		}
 		
+		public function theme( $theme )
+		{
+			if( is_dir( dirname( __FILE__ ) . '/../tpl/' . $theme ) )
+			{
+				$this->theme = $theme;
+			}
+		}
+		
 		public function render( $__template_name = null )
 		{
 			if( $__template_name === null ) throw new Exception( 'Missing template to render' );
 			
-			$__filename = dirname( __FILE__ ) . '/../tpl/' . $__template_name;
+			$__filename = dirname( __FILE__ ) . '/../tpl/' . $this->theme . '/' . $__template_name;
 			
 			if( !is_file( $__filename ) )
 			{
-				throw new Exception( 'Template file does not exist');
+				throw new Exception( 'Template file ('.$this->theme.':'.$__template_name.') does not exist');
 			}
 			
 			// extract template values and skip already existing variables (to stop possible injections)

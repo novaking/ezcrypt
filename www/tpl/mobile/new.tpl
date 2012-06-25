@@ -7,58 +7,33 @@
 					// welcome text that appears on home page encrypted with pidCrypt and crypto-js
 					// you can change this message but simply making a new encrypted text and decrypting
 					// it below
-					var welcome = {
-						'PIDCRYPT': 'U2FsdGVkX1/3iv49bDP/yTiHzVR7PGZQb6JhFqv4rFapLXiXa0MF9F0RFMzlk42F89q70qRJQ1CtIW/UeXuFGJQseQ6PVqiL\
-g28mQGTQI9AncQ4Yxgmt+XDdgq9dyOurxIBxSsEf7BuYMsZ8qYrr2YjY9Qp3I2c4dC8BmQc1os2eFM03yjMw2mM8RXFpstCC\
-SKB6sMQGxjUaydIAeNdzKFILm5+YT9iP84BFfy1OyMMfcu9R2SjB91AFKVX5z+poSCgHNCKu0xNv/tV3bdZPJDjOtfMGqLhj\
-65n8EYwjFC0lu0LNFedGRn7bg4nwzcq6jHwZ7XY6mCfmh0YcjK3pNLYX/tjrYtmpfpae+VQNBD1B+5Dr6ZGG/NCNnvWIjLsS\
-abyKfMGPzpMYzgfmM6lBavqOgJBH+Q741r54xNsI3zxXqiwpErhBLPfrkKX1cpVzAB0FjukYtoOJ01p2HWg4SnvWnobd1MvM\
-5mXzjwwoPbQHaaFhwYHkCwuaHcxFGKSalbU6kwg0Exl7zYUOGBJNrWz43w8bYZPCWQYYSVx+g1CmXbPJ1kvJoY5EoPEuIY4d\
-iHrlOyJviWQqwVhRkrgZ6w0NAnq3OBE2QM21o9METPeO4GaNrN+JA2+FMrnj7cFoMUerhOb6STpbkmlqJwOKLMx3qkUtCLSD\
-96ftr1aBLMNolSi3lGECoRQfDyyVBisSh231SlcNJ4rQz/Pur/jWbtRbLDPvRezweDCDJv0MDoRbs+/ioP3ZKdljPH/vK5HZ\
-puWP1/V9hUyaJ5sNJpKVdsOxVHpDq7KEmGJwM0rJ0fVKS9VDWdrFXPDk+ICJD9Qf3p7v7Zes/C4wuwuE5e1Q7sPNZGJOSlMJ\
-MK0q9kfO3J5A2pqbmg8AKBrikL/3EzL9QgV8jb68Qc2BcX/kzaTSSRUsogwz2nU+ABZ6tvz4dOOUQiTQS+OqS54j8cWImmfz\
-8D2sW8KuOZG8uM2N3vjHvh42ro6qkPeml5cUapkFVupLv4zRunU85hg4zKsNeNKY1ijVAcXBzj5Aiaa7TEtbu2o3bobRB9wJ\
-psalyCIfWlEvd1Z+qWC30/Be4Czc6TAiFhVENDbzhPC7Tri+m3l1fQoIc9c802TIwd6aW0/JT4qqeBUYApJFraQzmJyoN0ta\
-ShPxlOt8LD1wzOgB0+yoZX0x2iNPbPBdl/fgAt7Q6nUh0B2u4udxb0LWtrJcGF+vCF2jQb9sZYUeuXMvNoCya0obyq3Gxs5h\
-JsjELPe+jn5CHurSTar2sQ1a2roup4m9ursCCPCspO2t3OspnUlSDh2Mem/ejc/2jsZYgiWfD7Jt4S7khMDVdPADLpTQrcA3\
-0G4TBgf84gxhGMkdCQKqNBfLFFJIy0gewwl3w3CFFdtldKW2YSKL1HLjNMXr5zW+Qj357NRs/CeTG2ESk1ThEnDDluhbGlt2\
-vD2KY85I48e5jK9iO9UfHdw+K65i3WIil8rmweMkqnqpbwG7pzAnWgZyHUXlJSdRkkUhOQg09v2mD7wiioXTSkxBcEPuMRgJ',
-						'CRYPTO_JS': 'CPOzHbp0ouIDQ4LbavLkQG3g2Pxu69KeYXsde+QPBMbUacbDHgscveQzkvAtpX5nRKXk9docVl/thAC/rriHDuOMPSI1J5QDd\
-FuAYMnP7OLBKG2ZfzEMaGy4GFqzsEFVqnJr2Sf8GpK+TV5Jc0tg7a5t6F77pMCWUIV6zIBlZajzt9t57kuzDeWAHWapRMH2j\
-CHtc5yWZWb/j4B7OG4+Ed7qWAw97TWU558RlSRwxWs6i3Z7noO28YCQbZ33uRG5UtCIPOIsjbv0n9LWJVEebjDNRLJb0u8F8\
-WBLzt0AxBgYTVChRghNp67Dv41vWndQkRouzD/YImhsBf8XPT/1Q3lQCE3wQ7Gff6YgcjubdJjCMzuYSo5XeGF/NFeZlNcCP\
-eQvkJcCK0aRVsAYBKWSHxUEZZJ2oasJ/pVxOjZ35Ya5uQZcZ/FeYnAH2kcuHKKVaLOUAid7emryktpV64c6Iz3cZbq+ZP6Ls\
-AKp2oRcnADmDI+nB15gj6Tkl3ornXdt+o1/aHv2PrdKOwEFlm19ex0cCjOlrThiwRs6lF9hI6FTZBDK25xyVWHd0uwYgQBmz\
-qj/FAarMn90EIjBKokefP7AXKzSX+UbLDfmdgFf9f0BbYoquIuXDrnSi9fVUwnGZ41XiBUaypFIPsnH+vC4wLHVCR4d+XQ+k\
-iRLNC5elJkF3bcj9lP7w6XotvRs23J6Y1HAdYvxUy3Swh7nV6V3XcPBmLNbUrnMqdkQEfDfMhq+py7I5Gi+GUMFHn0ckn2ky\
-MJwLjQYjwvLnl7TWM7sULKMf0iRn1HaHrbRwyjvqi0fcr9K4SIeTlC+jG0zGPSw23UCEz+aaPzV0Dwj8kU8l1moK82HChH6K\
-BVda/s2Q5WPd+aiZEnOFoKBTi3Fx7xAX1Nc2O9rwSbhl0nZLYoBpn0/JNaTX9CftyGS4ej8MR5ycszqbqAujC+G8Lb0hWGyY\
-YJcLa3VcqSDHnJJllyjtli8Up2ovFjdihGtx9kFTIHuP3mSoFMZVBgHU8O5n7I+wFa149PCPGa8M7M1+YWIINHKaLofHAWcm\
-71GB9LgWAyIFS9YYqPAzCc9ZRLH2eltpb2OLNgNh3kTPJOJSE1SYn78LSgaAkvwXKMzE8IVAtzARlH92F+mtyxS5rw6yheEf\
-2j5dUrCsfiz/x46NH9IPf5sThXNrvpBYKoaRR9VsKL07nMEbf93ooxQnLbqhG90EnJRSMJyFJzlNsBCZt3okpEvlhoLcMQAB\
-A2qzQYDeIbELzyutESV2lBLzdbDTXsyZ3SD7a1bzbyuO/d6F1y0QFVy3Git+VXBv1Adf8M/7p5PZsxDFNCNcBh0+boNL3//L\
-BPF1kgApra40T2AJSLX3+wKgjSMnhsRp4Wf3e4Vq/p02wD/OLbKrHsAsYhYq2pGOijW6j1G1TQr0130bhnbQk+VNYz+vSmy3\
-N0h5DmJUWq33D/BPdbpoHt0IFesJzsgt5dlXPF/zyFeJvDwlKCe3lqfym2f5fJG3YQRV1YqAtEKm9d9EbI='
-					};
+					var welcome = 'Zr8mIp+HfTGf4fQT6fahIo6jABfRLct3FDlhTTLoviagn1GvT+mWuFPJf+ZIqZPZ9uDDm9ybrA2z19vnINF0wigEXHmz94ec\
+MhjxfofdLMVGc1M07PxIwfk1CrALuxIE7AVWC4vUT9jdLqmKztAlvRXAh299UqsRiya3NCSohkSao+X3Zw8lbw8f77maWeqX\
+awV96ru/Bccc5Rl17wfWmupiZb2ix8OjQ+OQ2T4dlr9QWHavCVLEv/H1eON61P0GoQlp8W+gBY1rk3kab4rqxFAGTPjqNhaL\
+WIK7eqhKekFnF8qMpXI7e2ktsSqi3wDzzygUmOfvZ+JCa4qutEcUa9y4OW3OAf8pt8MeFKvoSHUcsA9q6KSJDvBl90PjWpTW\
+DrLTDDlEgKgZF7TlJmGgtdHuKrNl/EfpDwJwCxOXAaQ4sWasnhOgG6RSsaWWyxMSA9blZf5BnxN1ercSRToMft2IJiyVqffB\
+VoDLytU7LUVcDLwqDy9hzXifzEeGeeBdS55rBYfSHMhLI4vIEioiyQUjOloyk+2B9ws41DJEOgbcuxPDpLiMIZk5+WYDHpSE\
+KeXrvOb/x8e7UZu+XTOV6xRp25U=';
 		
 					$( function() {
 						editor.setOption( 'readOnly', true );
-						editor.setOption( 'mode', 'application/x-httpd-php' );
+						editor.setOption( 'lineNumbers', false );
+						editor.setOption( 'mode', 'htmlmixed' );
 
 						// load our crypto library, 'lib' must be defined in core.js
 						// decrypt our welcome text
 						ezcrypt( lib, function() {
 							ez = this;
-							editor.setValue( ez.aes.decrypt( 'MzksNTIsMTU5LDc4LDQ1LDQ1LDEwMSwxMjEsMTY2LDE4LDI4LDE3NSwyMzIsMTU1LDI5LDE1MSw4MCw1MSw1NCwxMTUsMTcsNTgsNjQsMjQxLDI0OSwxNDEsMTk1LDk3LDk0LDcsOSwyNDU=', welcome[lib] ) );
+							editor.setValue( decrypt( 'MzksNTIsMTU5LDc4LDQ1LDQ1LDEwMSwxMjEsMTY2LDE4LDI4LDE3NSwyMzIsMTU1LDI5LDE1MSw4MCw1MSw1NCwxMTUsMTcsNTgsNjQsMjQxLDI0OSwxNDEsMTk1LDk3LDk0LDcsOSwyNDU=', welcome ) );
 						} );
 					} );
 				</script>
 				
 				<input type="hidden" id="content" />
+				<div id="speed"><div id="totaltime"></div><div id="execute"></div><div id="coloring"></div></div>
 				
 				<div style="height: 20px; border-bottom: 1px SOLID #f2f2f2;"></div>
-				<div style="height: 20px;"></div>
+				<div style="height: 5px;"></div>
 				
 				<div class="syntax">
 					Formatting:
@@ -106,17 +81,19 @@ N0h5DmJUWq33D/BPdbpoHt0IFesJzsgt5dlXPF/zyFeJvDwlKCe3lqfym2f5fJG3YQRV1YqAtEKm9d9E
 						<option value="text/x-verilog"<?=$pastes->selected_syntax('text/x-verilog');?>>&nbsp;&nbsp;Verilog</option>
 						<option value="text/x-yaml"<?=$pastes->selected_syntax('text/x-yaml');?>>&nbsp;&nbsp;YAML</option>
 					</select>
-					<div style="float: right; font-size: 11px; color: #666; font-style: italic;">Please note, that pasting a large amount of text may cause your browser to hang while encryption/decryption occurs.</div>
+					<div style="float: right; font-size: 11px; color: #666; font-style: italic;">Please note, that pasting a large amount of text may cause your mobile to hang while encryption/decryption occurs.</div>
 				</div>
 				
-				<div style="position: relative;">
+				<div style="clear: both; position: relative;">
 					<textarea id="text" name="text" spellcheck="false"></textarea>
 					<textarea id="result" name="result" readonly spellcheck="false"></textarea>
+					<div id="encrypttime"></div>
 				</div>
 				
 				<div id="options">
 					<acronym title="Expire this paste after the period of time selected">Expire in</acronym>
 					<select id="ttl">
+						<!--<option value="-100">one-time only</option>-->
 						<option value="300">five minutes</option>
 						<option value="3600">an hour</option>
 						<option value="86400">a day</option>

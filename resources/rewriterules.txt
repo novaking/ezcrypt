@@ -1,4 +1,4 @@
-Lighttpd 1.4
+~~~~ Lighttpd 1.4 ~~~~
 
 url.rewrite-once = (
 	# Index
@@ -6,39 +6,54 @@ url.rewrite-once = (
 	
 	# Valid URLs
 	"^/css/(.+)$" => "/css/$1",
-	"^/inc/(.+)$" => "/inc/$1",
+	"^/inc/jslibs/(.+)$" => "/inc/jslibs/$1",
 	
 	# About Page
 	"^/about/?$" => "/about.php",
 	
-	# Pastes
+	# Raw Paste
+	"^/r/(.+){1,}$" => "/index.php?id=$1&raw",
+	# Password Protected Paste
+	"^/p/(.+){1,}$" => "/index.php?id=$1",
+	# Normal Paste
 	"^/(.+){1,}$" => "/index.php?id=$1"
 )
 
-Lighttpd 2.0
+~~~~ Lighttpd 2.0 ~~~~
 
 if !physical.is_file {
 	rewrite (
 		# About Page
 		"^/about$" => "/about.php",
 
-		# Pastes
-		"^/(.+)$" => "/index.php?id=$1"
+		# Raw Paste
+		"^/r/(.+){1,}$" => "/index.php?id=$1&raw",
+		# Password Protected Paste
+		"^/p/(.+){1,}$" => "/index.php?id=$1",
+		# Normal Paste
+		"^/(.+){1,}$" => "/index.php?id=$1"
 	);
 }
 
-nginx
+~~~~ nginx ~~~~
 
 if (!-e $request_filename) {
 	rewrite ^/about$ /about.php break;
-	rewrite ^/(.+)$ /index.php?id=$1 break;
+	rewrite ^/r/(.+){1,}$ /index.php?id=$1&raw break;
+	rewrite ^/p/(.+){1,}$ /index.php?id=$1 break;
+	rewrite ^/(.+){1,}$ /index.php?id=$1 break;
 }
 
-Apache
+~~~~ Apache ~~~~
 
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteRule ^/about$ /about.php [L]
-RewriteRule ^/(.+)$ /index.php?id=$1 [QSA,L]
+# Raw Paste
+RewriteRule ^/r/(.+){1,}$ /index.php?id=$1&raw [QSA,L]
+# Password Protected Paste
+RewriteRule ^/p/(.+){1,}$ /index.php?id=$1 [QSA,L]
+# Normal Paste
+RewriteRule ^/(.+){1,}$ /index.php?id=$1 [QSA,L]

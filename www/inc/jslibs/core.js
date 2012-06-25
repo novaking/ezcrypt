@@ -11,6 +11,11 @@ var editor; // syntax highlighter
 var ez; // object holder of ezcrypto library
 var _encrypting = null; // used as flag state to determine if encryption is in mid-progress
 
+var __timer_decryption; // time taken to decrypt
+var __timer_encryption; // time taken to encrypt
+var __timer_coloring; // time taken to color syntax
+var __timer_total; // total time taken
+
 // default options for our lazy loader
 $LAB.setGlobalDefaults( {
 	UseLocalXHR: true,
@@ -26,7 +31,8 @@ $( function() {
 			lineNumbers: true,
 			matchBrackets: false,
 			lineWrapping: false,
-			readOnly: true
+			readOnly: true,
+			onChange: onCodeChange
 		} );
 		
 		editor.setOption( 'mode', $( '#syntax' ).val() );
@@ -74,6 +80,19 @@ $( function() {
 		{
 			$( '.tool-numbers' ).removeClass( 'tool-numbers-on' );
 			editor.setOption( 'lineNumbers', false );
+		}
+	} );
+	$( '#tool-fullscreen' ).bind( 'click', function() {
+		var checked = $( '#tool-fullscreen' ).is( ':checked' );
+		if( checked == 1 )
+		{
+			$( '.tool-fullscreen' ).addClass( 'tool-fullscreen-on' );
+			$( '#holder' ).css( 'width', '100%' );
+		}
+		else
+		{
+			$( '.tool-fullscreen' ).removeClass( 'tool-fullscreen-on' );
+			$( '#holder' ).css( 'width', '' );
 		}
 	} );
 	
@@ -124,13 +143,27 @@ function enableHover()
 	$( '#en' ).hover(
 		function() {
 			$( '#result' ).show();
+			$( '#encrypttime' ).show();
 			$( '#result' ).focus();
 		},
 		function() {
 			$( '#result' ).hide();
+			$( '#encrypttime' ).hide();
 			$( '#text' ).focus();
 		}
 	);
+}
+
+// determine duration taken to render the syntax highlighter
+function onCodeChange( ed, obj )
+{
+	__timer_coloring = timeDiff.getDiff();
+	// display duration
+	$( '#coloring' ).html( 'syntax: ' + __timer_coloring + 'ms,');
+	
+	// if we have hit this point it means we have finished, display total time taken
+	__timer_total = ( __timer_decryption + __timer_coloring );
+	$( '#totaltime' ).html( 'total: ' + __timer_total + 'ms');
 }
 
 // simple function wrapper to decryption time can be logged
@@ -143,9 +176,12 @@ function decrypt( cipher, data )
 	// start timer and decrypt
 	timeDiff.setStartTime();
 	var output = ez.aes.decrypt( cipher, data );
-	var diff = timeDiff.getDiff();
+	__timer_decryption = timeDiff.getDiff();
+	
+	timeDiff.setStartTime(); // reset timer
+	
 	// display duration
-	$( '#execute' ).html( 'decryption: ' + diff + 'ms');
+	$( '#execute' ).html( 'decryption: ' + __timer_decryption + 'ms,');
 	$( '.cm-s-default' ).parent().show();
 	$( '#decrypting' ).hide();
 	return output;
@@ -155,7 +191,12 @@ function decrypt( cipher, data )
 // @todo: add timestamp on encrypting?
 function encrypt( cipher, data )
 {
-	return stringBreak( ez.aes.encrypt( cipher, data ), 96 );
+	// start timer and encrypt
+	timeDiff.setStartTime();
+	var encrypt = stringBreak( ez.aes.encrypt( cipher, data ), 96 );
+	__timer_encryption = timeDiff.getDiff();
+	$( '#encrypttime' ).html( 'encryption: ' + __timer_encryption + 'ms');
+	return encrypt;
 }
 
 // when a password is assigned to a paste
@@ -223,6 +264,7 @@ function submitData()
 	
 	$( '#en' ).unbind( 'mouseenter mouseleave' );
 	$( '#result' ).show();
+	$( '#encrypttime' ).show();
 	
 	// make data post friendly
 	var data = $( '#result' ).val();
@@ -247,7 +289,16 @@ function submitData()
 		data: '&data=' + data + '&p=' + password + '&ttl=' + ttl + '&syn=' + syntax,
 		cache: false,
 		success: function( json ) {
-			window.location = '/' + json.id + '#' + $( '#key' ).val();
+			if( ttl == -100 )
+			{
+				// special condition when it's a one-time only paste, we don't redirect the user as that would trigger the delete call
+				// instead we simply mock the page and provide the url of the paste
+				
+			}
+			else
+			{
+				window.location = '/' + ( ( password != '' ) ? 'p/' : '' ) + json.id + '#' + $( '#key' ).val();
+			}
 		},
 		error: function() {
 			enableHover();

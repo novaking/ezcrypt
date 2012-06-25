@@ -144,10 +144,12 @@
 			
 			// determine if the paste has expired.
 			// if ttl is set to -1 that means it a perm paste
+			// if ttl is set to -100 that means this is a one-time only paste
 			// otherwise test to see if the ttl duration has been met
-			if( $this->paste['ttl'] != -1 && $this->paste['counter'] > $this->paste['ttl'] )
+			if( $this->paste['ttl'] != -1 && ( $this->paste['counter'] > $this->paste['ttl'] || $this->paste['ttl'] == -100 ) )
 			{
-				// this paste is flagged as expired, time to clean up
+				// this paste is flagged as expired, or is a one-time only paste
+				// time to clean up the paste
 				$sql = '
 					DELETE FROM
 						pastes
@@ -161,9 +163,12 @@
 				$stmt->bind_param( 'i', $this->id );
 				$stmt->execute();
 				
-				unset( $this->paste ); // cleanup
-					
-				return EZCRYPT_HAS_EXPIRED;
+				// only flag expired if this isn't a one-time only paste
+				if( $this->paste['ttl'] != -100 )
+				{
+					unset( $this->paste ); // cleanup
+					return EZCRYPT_HAS_EXPIRED;
+				}
 			}
 			
 			return false;

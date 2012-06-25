@@ -14,6 +14,8 @@ body
 	line-height: 20px;
 	height: 100%;
 	min-height: 100%;
+	margin: 0px;
+	position: relative;
 }
 
 input[type="checkbox"], input[type="radio"]
@@ -106,6 +108,62 @@ a
 a:hover
 {
 	text-decoration: underline;
+}
+
+#overlay
+{
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	background: rgb(0, 0, 0);
+	background: rgba(0, 0, 0, 0.6);
+	background: transparent !ie; /* clear solid background for ie */
+	zoom: 1; /* required for the filters */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#33000000);
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#33000000)";
+	z-index: 99;
+}
+
+#popup
+{
+	font-family: Verdana, Geneva, Arial, sans-serif;
+	background-color: #FFF;
+	color: #000;
+	margin-left: -260px;
+	margin-top: -70px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 500px;
+	height: 120px;
+	visibility: visible;
+	z-index: 999;
+	
+	padding: 10px;
+	
+	-moz-box-shadow: 0 0 10px #000;
+	-webkit-box-shadow: 0 0 10px #000;
+	box-shadow: 0 0 10px #000;
+	
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#popup .success
+{
+	font-weight: bold;
+	font-size: 18px;
+	text-align: center;
+}
+
+#popup .url
+{
+	width: 488px;
+	padding: 5px;
+	font-size: 16px;
 }
 
 #menu a:not(:last-child)
@@ -339,7 +397,7 @@ textarea
 	box-shadow: inset 0 0 4px 2px #548c29, 0 0 1px 0 #eeeeee;
 }
 
-#tool-numbers, #tool-wrap
+#tool-numbers, #tool-wrap, #tool-fullscreen
 {
 	display: none;
 }
@@ -396,12 +454,65 @@ textarea
 	border-bottom-color: #dedede !important;
 }
 
-#execute
+.tool-fullscreen
+{
+	display: block;
+	float: right;
+	width: 21px;
+	height: 18px;
+	margin-top: 2px;
+	margin-left: 2px;
+	background: #FFF url(/css/full-screen.png) 3px 2px no-repeat;
+	border-width: 1px;
+	border-style: SOLID;
+	border-left-color: #dedede;
+	border-top-color: #dedede;
+	border-right-color: #777777;
+	border-bottom-color: #777777;
+}
+
+.tool-fullscreen-on
+{
+	border-left-color: #777777 !important;
+	border-top-color: #777777 !important;
+	border-right-color: #dedede !important;
+	border-bottom-color: #dedede !important;
+}
+
+#encrypttime
+{
+	display: none;
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+	height: 15px;
+	font-size: 10px;
+	color: #CECECE;	
+}
+
+#speed
 {
 	float: right;
 	height: 15px;
 	font-size: 10px;
 	color: #CECECE;
+}
+
+#speed #execute, #speed #coloring, #speed #totaltime
+{
+	float: right;
+	padding-left: 5px;
+}
+
+#decrypting
+{
+	position: absolute;
+	left: 40px;
+	margin-top: 5px;
+	z-index: 100;
+	width: 875px;
+	height: 15px;
+	background: url(/css/decrypting.gif) top left no-repeat;
 }
 
 #push
@@ -414,7 +525,7 @@ textarea
 {
 	position: absolute;
 	height: 25px;
-	width: 920px;
+	width: 100%;
 	margin: 0px auto;
 	padding-top: 10px;
 	text-align: center;

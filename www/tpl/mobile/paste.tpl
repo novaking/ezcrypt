@@ -1,5 +1,6 @@
 <?php
 	include dirname( __FILE__ ) . '/includes/header.tpl';
+	
 ?>
 
 	<script type="text/javascript">
@@ -20,6 +21,7 @@
 				{
 					$( '#typepassword,#typekey' ).live( 'keydown', function( e ) { if( e.keyCode == 13 ) { $( this ).parent().find( 'input[type=button]' ).click(); } } );
 					$( '.cm-s-default' ).parent().hide();
+					$( '#decrypting' ).hide();
 <?php
 						if( !empty( $password ) )
 						{
@@ -67,10 +69,12 @@ JS;
 		<div style="position: relative;">
 			<textarea id="text" name="text" spellcheck="false"></textarea>
 			<textarea id="result" name="result" readonly spellcheck="false"></textarea>
+			<div id="encrypttime"></div>
 		</div>
 		<div id="options">
 			<acronym title="Expire this paste after the period of time selected">Expire in</acronym>
 			<select id="ttl">
+				<!--<option value="-100">one-time only</option>-->
 				<option value="300">five minutes</option>
 				<option value="3600">an hour</option>
 				<option value="86400">a day</option>
@@ -96,10 +100,10 @@ JS;
 	</div>
 	<div id="wrap" style="clear: both;"></div>
 	
-	<div id="decrypting" style="position: absolute; left: 40px; margin-top: 5px; z-index: 100; width: 875px; height: 15px; background: url(/css/decrypting.gif) top left no-repeat;"></div>
+	<div id="decrypting"></div>
 	<input type="hidden" id="content" />
 	
-	<div id="execute"></div>
+	<div id="speed"><div id="totaltime"></div><div id="execute"></div><div id="coloring"></div></div>
 
 	<noscript>
 		<div id="noscript">

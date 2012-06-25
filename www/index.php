@@ -1,6 +1,7 @@
 <?php
 	include_once dirname( __FILE__ ) . '/inc/config.inc.php';
 	include_once dirname( __FILE__ ) . '/inc/paste.class.php';
+	include_once dirname( __FILE__ ) . '/inc/mobile.class.php';
 	include_once dirname( __FILE__ ) . '/inc/templates.class.php';
 	
 	// This may be required if a user is dealing with a file that is so large that is takes more than 30 seconds
@@ -9,6 +10,16 @@
 	$conf = get_config(); // load up our config
 	
 	$template = new Template();
+	
+	// detect what device is viewing the page
+	$detect = new Mobile();
+	
+	$template->theme( 'default' );
+	//if( $detect->isMobile() )
+	//	$template->theme( 'mobile' );
+	//elseif( $detect->isTablet() )
+	//	$template->theme( 'tablet' );
+	
 	$template->assign( 'meta_title', 'EZCrypt' );
 	$pastes = new Paste();
 	$template->assign( 'pastes', $pastes );
@@ -55,6 +66,13 @@
 				$template->assign( 'paste', '' );
 				$template->assign( 'syntax', '' );
 				$template->assign( 'password', true );
+				
+				// if a password is required and this is a raw paste
+				// inform the user they are unable to use it.
+				if( isset( $_GET['raw'] ) )
+				{
+					$template->assign( 'paste', 'You can not obtain a raw of this paste as it is password protected.' );
+				}
 				break;
 			case EZCRYPT_MISSING_DATA:
 				$template->assign( 'meta_title', 'EZCrypt - Paste does not exist' );
@@ -66,6 +84,11 @@
 				$template->assign( 'paste', $paste['data'] );
 				$template->assign( 'syntax', $paste['syntax'] );
 				break;
+		}
+		
+		if( isset( $_GET['raw'] ) )
+		{
+			die( $template->render( 'raw.tpl' ) );
 		}
 		
 		$template->assign( 'meta_title', 'EZCrypt - Paste' );
@@ -85,4 +108,5 @@
 	}
 	
 	// new paste
+	$template->assign( 'norobots', false );
 	$template->render( 'new.tpl' );
