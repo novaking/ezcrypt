@@ -1,6 +1,7 @@
 <?php
 
-	include_once dirname( __FILE__ ) . '/functions.inc.php';
+	require_once dirname( __FILE__ ) . '/functions.inc.php';
+	require_once dirname( __FILE__ ) . '/db.inc.php';
 
 	$__config = array( 
 		'domain' => $_SERVER['SERVER_NAME'],
@@ -18,28 +19,9 @@
 		)
 	);
 
-	function get_config() { global $__config; return $__config; }
-	
-	$__db = null;
-	
-	function get_db()
+	if (file_exists(dirname( __FILE__ ) . '/config-local.inc.php'))
 	{
-		global $__db;
-		
-		if( $__db !== null ) return $__db;
-		
-		$conf = get_config();
-		
-		// connect to database
-		$__db = new mysqli( $conf['database']['host'], $conf['database']['username'], $conf['database']['password'], $conf['database']['db'] );
-		
-		if( mysqli_connect_error() )
-		{
-			die( 'Unable to connect to db node server' );
-		}
-		
-		$__db->query( 'SET NAMES utf32;' );
-		
-		return $__db;
+		require_once dirname( __FILE__ ) . '/config-local.inc.php';
 	}
-	
+
+	function get_config() { global $__config; return $__config; }

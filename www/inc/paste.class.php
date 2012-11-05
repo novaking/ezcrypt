@@ -22,37 +22,13 @@
 	class Paste
 	{
 		private $paste;
-		private $db;
 		private $id;
-		
-		function __construct()
-		{
-			$this->db = get_db();
-		}
 		
 		function get( $id )
 		{
 			$this->id = alphaID( $id, true );
-			
-			// grab paste from database
-			$sql = '
-				SELECT
-					*, ( UNIX_TIMESTAMP() - added ) as counter
-				FROM
-					pastes
-				WHERE
-					id = ?
-				LIMIT
-					1
-			';
-			
-			$stmt = $this->db->prepare( $sql );
-			$stmt->bind_param( 'i', $this->id );
-			$stmt->execute();
-			
-			$res = $stmt->get_result();
-			
-			if( ( $paste = $res->fetch_array( MYSQLI_ASSOC ) ) !== false )
+
+			if (false !== ( $paste = db_get( $this->id ) ))
 			{
 				$this->paste = $paste; // assign to class variable
 				
@@ -71,69 +47,53 @@
 		
 		function add( $data, $syntax, $ttl, $password = null )
 		{
-			// submit new paste to server
-			$sql = '
-				INSERT INTO
-					pastes
-				( `data`, `syntax`, `added`, `ttl` )
-				VALUES
-					( ?,  ?, UNIX_TIMESTAMP(), ? )
-			';
-			
-			$stmt = $this->db->prepare( $sql );
-			$stmt->bind_param( 'ssi', $data, $syntax, $ttl );
-			$stmt->execute();
-			$stmt->close();
-			
-			$new_id = $this->db->insert_id;
-			
-			// if the user has set a password, we now apply it as we use the id as a simple salt
-			$password = ( !empty( $password ) ) ? sha1( $new_id . $password ) : null;
-			
-			if( !empty( $password ) )
-			{
-				$sql = '
-					UPDATE
-						pastes
-					SET
-						password = ?
-					WHERE
-						id = ?
-					LIMIT
-						1
-				';
-				
-				$stmt = $this->db->prepare( $sql );
-				$stmt->bind_param( 'si', $password, $new_id );
-				$stmt->execute();
-				$stmt->close();
+			if (!empty($password)) {
+				// create a salt that ensures crypt creates an md5 hash
+				$base64_alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+				$salt = '$5$';
+				for($i=0; $i<16; $i++) $salt .= $base64_alphabet[rand(0,63)];
+				$salt .= '$';
+				$password = crypt($password, $salt);
 			}
-			
-			return $new_id;
+
+			// submit new paste to server
+			return db_add($data, $syntax, $ttl, $password);
 		}
 		
 		function validate_password( $password )
 		{
 			// if we haven't gotten a paste yet.
 			if( empty( $this->paste ) ) return EZCRYPT_MISSING_DATA;
-			
-			// the user has entered in a password, see if it is correct
-			if( !empty( $this->paste['password'] ) && !empty( $password ) && strcmp( sha1( $this->paste['id'] . $password ), $this->paste['password'] ) === 0 )
+
+			if (!empty($this->paste['password']))
 			{
-				// correct, send user the required data
-				return EZCRYPT_PASSWORD_SUCCESS;
-			}
-			elseif( !empty( $this->paste['password'] ) && !empty( $password ) && strcmp( sha1( $this->paste['id'] . $password ), $this->paste['password'] ) !== 0 )
-			{
+				if (empty($password))
+				{
+					// prompt user for password
+					return EZCRYPT_PASSWORD_REQUIRED;
+				}
+
+				if (strlen($this->paste['password']) == 40 && '$' != $this->paste['password'][0])
+				{
+					// old style, salted with id
+					$password = sha1($this->paste['id'] . $password);
+				}
+				else
+				{
+					// crypted
+					$password = crypt($password, $this->paste['password']);
+				}
+
+				if (0 == strcmp($password, $this->paste['password']))
+				{
+					// correct, send user the required data
+					return EZCRYPT_PASSWORD_SUCCESS;
+				}
+
 				// incorrect, give the json response an error
 				return EZCRYPT_PASSWORD_FAILED;
 			}
-			elseif( !empty( $this->paste['password'] ) )
-			{
-				// prompt user for password
-				return EZCRYPT_PASSWORD_REQUIRED;
-			}
-			
+
 			return EZCRYPT_NO_PASSWORD;
 		}
 		
@@ -146,29 +106,17 @@
 			// if ttl is set to -1 that means it a perm paste
 			// if ttl is set to -100 that means this is a one-time only paste
 			// otherwise test to see if the ttl duration has been met
-			if( $this->paste['ttl'] != -1 && ( $this->paste['counter'] > $this->paste['ttl'] || $this->paste['ttl'] == -100 ) )
+			if ( -100 == $this->paste['ttl'] )
 			{
-				// this paste is flagged as expired, or is a one-time only paste
-				// time to clean up the paste
-				$sql = '
-					DELETE FROM
-						pastes
-					WHERE
-						id = ?
-					LIMIT
-						1
-				';
-				
-				$stmt = $this->db->prepare( $sql );
-				$stmt->bind_param( 'i', $this->id );
-				$stmt->execute();
-				
-				// only flag expired if this isn't a one-time only paste
-				if( $this->paste['ttl'] != -100 )
-				{
-					unset( $this->paste ); // cleanup
-					return EZCRYPT_HAS_EXPIRED;
-				}
+				// one-time only paste, delete it now
+				db_delete($this->id);
+			}
+			else if( $this->paste['ttl'] != -1 && $this->paste['age'] > $this->paste['ttl'] )
+			{
+				// this paste is flagged as expired, time to clean up
+				db_delete($this->id);
+				unset( $this->paste ); // cleanup
+				return EZCRYPT_HAS_EXPIRED;
 			}
 			
 			return false;
