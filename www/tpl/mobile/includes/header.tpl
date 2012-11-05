@@ -6,7 +6,7 @@
 		<meta name="description" content="EZCrypt - The original safer way to encrypt your pastes online!" />
 		<meta name="keywords" content="ezcrypt, encryption, pastebin, paste, secure, aes" />
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		<?if( $norobots !== false ) {?><meta name="robots" content="noarchive" />
+		<?if( !isset($norobots) || $norobots !== false ) {?><meta name="robots" content="noarchive" />
 		<meta name="googlebot" content="nosnippet" />
 		<meta name="googlebot" content="noarchive" />
 		<?}?><meta http-equiv="cache-control" content="no-cache" />
