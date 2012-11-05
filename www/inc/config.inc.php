@@ -31,26 +31,9 @@
 		<a href="mailto:contact@ezcrypt.it">Contact</a>
 EOD;
 
-	function includelocal($self, $relpath)
-	{
-		$path = dirname($self) . '/' . $relpath;
-		if (file_exists($path))
-		{
-			include($path);
-			return true;
-		}
-		return false;
-	}
-
 	if (file_exists(dirname( __FILE__ ) . '/config-local.inc.php'))
 	{
 		require_once dirname( __FILE__ ) . '/config-local.inc.php';
 	}
 
 	function get_config() { global $__config; return $__config; }
-
-	function href($path)
-	{
-		global $__config;
-		echo $__config['site']['url'] . $path;
-	}

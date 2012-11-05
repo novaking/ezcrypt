@@ -42,15 +42,15 @@
 			ENCRYPT_TYPE: {
 				'CLIPPERZ': {
 					'lib': [
-					    '/inc/jslibs/clipperz/MochiKit/MochiKit.js',
-						'/inc/jslibs/clipperz/MochiKit/Base.js',
-					    '/inc/jslibs/clipperz/MochiKit/Logging.js',
-					    '/inc/jslibs/clipperz/JSON/json2.js',
-					    '/inc/jslibs/clipperz/YUI/Utils.js',
-						'/inc/jslibs/clipperz/Base.js',
-						'/inc/jslibs/clipperz/ByteArray.js',
-						'/inc/jslibs/clipperz/Crypto/SHA.js',
-						'/inc/jslibs/clipperz/Crypto/AES.js'
+						'jslibs/clipperz/MochiKit/MochiKit.js',
+						'jslibs/clipperz/MochiKit/Base.js',
+						'jslibs/clipperz/MochiKit/Logging.js',
+						'jslibs/clipperz/JSON/json2.js',
+						'jslibs/clipperz/YUI/Utils.js',
+						'jslibs/clipperz/Base.js',
+						'jslibs/clipperz/ByteArray.js',
+						'jslibs/clipperz/Crypto/SHA.js',
+						'jslibs/clipperz/Crypto/AES.js'
 					],
 					'load': '',
 					'decrypt': {
@@ -72,12 +72,12 @@
 				},
 				'CRYPTO_JS': {
 					'lib': [
-					    '/inc/jslibs/crypto-js/crypto/crypto.js',
-					    '/inc/jslibs/crypto-js/sha1/sha1.js',
-					    '/inc/jslibs/crypto-js/hmac/hmac.js',
-					    '/inc/jslibs/crypto-js/pbkdf2/pbkdf2.js',
-					    '/inc/jslibs/crypto-js/blockmodes/blockmodes.js',
-					    '/inc/jslibs/crypto-js/aes/aes.js'
+					    'jslibs/crypto-js/crypto/crypto.js',
+					    'jslibs/crypto-js/sha1/sha1.js',
+					    'jslibs/crypto-js/hmac/hmac.js',
+					    'jslibs/crypto-js/pbkdf2/pbkdf2.js',
+					    'jslibs/crypto-js/blockmodes/blockmodes.js',
+					    'jslibs/crypto-js/aes/aes.js'
 					],
 					'load': '',
 					'decrypt': {
@@ -96,11 +96,11 @@
 				'MOVEABLE_TYPE': {},
 				'PIDCRYPT': {
 					'lib': [
-						'/inc/jslibs/pidCrypt/pidcrypt_util.js',
-						'/inc/jslibs/pidCrypt/pidcrypt.js',
-						'/inc/jslibs/pidCrypt/md5.js',
-						'/inc/jslibs/pidCrypt/aes_core.js',
-						'/inc/jslibs/pidCrypt/aes_cbc.js'
+						'jslibs/pidCrypt/pidcrypt_util.js',
+						'jslibs/pidCrypt/pidcrypt.js',
+						'jslibs/pidCrypt/md5.js',
+						'jslibs/pidCrypt/aes_core.js',
+						'jslibs/pidCrypt/aes_cbc.js'
 					],
 					'load': 'pidCrypt.AES.CBC',
 					'decrypt': {

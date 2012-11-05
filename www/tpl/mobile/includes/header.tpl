@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title><?=$meta_title?></title>
+		<base href="<?=$site_url?>" />
 		<meta name="description" content="EZCrypt - The original safer way to encrypt your pastes online!" />
 		<meta name="keywords" content="ezcrypt, encryption, pastebin, paste, secure, aes" />
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
