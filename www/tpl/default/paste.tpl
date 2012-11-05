@@ -87,7 +87,7 @@ JS;
 			<input type="text" id="typepassword" name="password" style="display: none;" />
 			
 			<input type="hidden" id="key" name="key" />
-		 	<input type="submit" id="en" value="Submit" onclick="return submitData();" style="float: right;" />
+			<input type="submit" id="en" value="Submit" onclick="return submitData('<?=$site_url?>');" style="float: right;" />
 		</div>
 	</div>
 	

@@ -1,8 +1,8 @@
 <?php
-	include_once dirname( __FILE__ ) . '/inc/config.inc.php';
-	include_once dirname( __FILE__ ) . '/inc/paste.class.php';
-	include_once dirname( __FILE__ ) . '/inc/mobile.class.php';
-	include_once dirname( __FILE__ ) . '/inc/templates.class.php';
+	require_once dirname( __FILE__ ) . '/inc/config.inc.php';
+	require_once dirname( __FILE__ ) . '/inc/paste.class.php';
+	require_once dirname( __FILE__ ) . '/inc/mobile.class.php';
+	require_once dirname( __FILE__ ) . '/inc/templates.class.php';
 	
 	// This may be required if a user is dealing with a file that is so large that is takes more than 30 seconds
 	set_time_limit( 0 );

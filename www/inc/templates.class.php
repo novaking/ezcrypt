@@ -17,7 +17,10 @@
 		
 		function __construct()
 		{
-			//$this->assign( 'google_verify', '<meta name="verify-v1" content="HfJckMzdut1OAtGdt9CiJPYlzbRAlmFMrZFEcGThxQ0=" />' );
+			$config = get_config();
+			foreach ($config['site'] as $key => $value) {
+				$this->assign('site_' . $key, $value);
+			}
 		}
 		
 		// assign template version

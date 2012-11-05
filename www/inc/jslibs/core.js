@@ -240,7 +240,7 @@ function requestData( password )
 	} );
 }
 
-function submitData()
+function submitData(url)
 {
 	if( $( '#text' ).val() == '' )
 	{
@@ -283,7 +283,7 @@ function submitData()
 	
 	// send submission to server
 	$.ajax( {
-		url: '/',
+		url: url,
 		type: 'POST',
 		dataType: 'json',
 		data: '&data=' + data + '&p=' + password + '&ttl=' + ttl + '&syn=' + syntax,
@@ -297,7 +297,7 @@ function submitData()
 			}
 			else
 			{
-				window.location = '/' + ( ( password != '' ) ? 'p/' : '' ) + json.id + '#' + $( '#key' ).val();
+				window.location = url + ( ( password != '' ) ? 'p/' : '' ) + json.id + '#' + $( '#key' ).val();
 			}
 		},
 		error: function() {

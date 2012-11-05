@@ -1,5 +1,5 @@
 <?php
-	include dirname( __FILE__ ) . '/includes/header.tpl';
+	require dirname( __FILE__ ) . '/includes/header.tpl';
 	
 ?>
 <h1>About EZCrypt</h1>
@@ -16,7 +16,7 @@ all of your pastes would still be safe.<br />
 <br />
 How it works:<br />
 <br />
-<img src="/css/how-it-works.png" width="850" height="328" /><br />
+<img src="<?=$site_url?>css/how-it-works.png" width="850" height="328" /><br />
 <br />
 When you upload a paste, Javascript generates a random key which is used to encrypt your data.<br />
 You can see what your paste will look like to our server by holding the mouse over the "Submit" button.<br />
@@ -33,4 +33,4 @@ passive listening, they are detectable.<br />
 <br />
 <br />
 <?php
-	include dirname( __FILE__ ) . '/includes/footer.tpl';
+	require dirname( __FILE__ ) . '/includes/footer.tpl';

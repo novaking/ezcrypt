@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title><?=$meta_title;?></title>
+		<title><?=$meta_title?></title>
 		<meta name="description" content="EZCrypt - The original safer way to encrypt your pastes online!" />
 		<meta name="keywords" content="ezcrypt, encryption, pastebin, paste, secure, aes" />
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -10,8 +10,8 @@
 		<meta name="googlebot" content="noarchive" />
 		<?}?><meta http-equiv="cache-control" content="no-cache" />
 		<meta http-equiv="pragma" content="no-cache" />
-		<link rel="stylesheet" href="/css/styles.min.css" />
-		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="stylesheet" href="<?=$site_url?>css/styles.min.css" />
+		<link rel="shortcut icon" href="<?=$site_url?>favicon.ico" />
 		
 		<!--[if gte IE 9]>
 		<style type="text/css">
@@ -39,8 +39,8 @@
 				return f;
 			} )();
 		</script>
-		<script type="text/javascript" src="/inc/jslibs/LAB.min.js"></script>
-		<script type="text/javascript" src="/inc/jslibs/core-0.4.min.js"></script>
+		<script type="text/javascript" src="<?=$site_url?>inc/jslibs/LAB.min.js"></script>
+		<script type="text/javascript" src="<?=$site_url?>inc/jslibs/core-0.4.min.js"></script>
 	</head>
 	<body>
 		<!--
@@ -57,14 +57,14 @@
 				<a href="/">EZCrypt</a> <span class="small">v0.4</span> - Giving you the power to encrypt your information
 			</div>
 			<div id="menu">
-				<a href="/">Home</a>
+				<a href="<?=$site_url?>">Home</a>
 				<span class="small">&nbsp;</span>
-				<a href="/about">About</a>
+				<a href="<?=$site_url?>about">About</a>
 				<span class="small">&nbsp;</span>
-				<a href="mailto:contact@ezcrypt.it">Contact</a>
+				<a href="<?=$site_contact?>">Contact</a>
 				<span class="small">&nbsp;</span>
-				<a href="https://github.com/novaking/ezcrypt" target="_blank">Sourcecode</a>
+				<a href="<?=$site_source?>" target="_blank">Sourcecode</a>
 				<span class="small">&nbsp;</span>
-				<div style="position: absolute; right: 0px; top: 10px;"><a href="http://flattr.com/thing/647627/EZCrypt" target="_blank"><img src="/css/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" width="93" height="20" /></a></div>
+				<div style="position: absolute; right: 0px; top: 10px;"><a href="http://flattr.com/thing/647627/EZCrypt" target="_blank"><img src="<?=$site_url?>css/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" width="93" height="20" /></a></div>
 			</div>
 			<div id="main">

@@ -285,7 +285,7 @@ textarea
 	width: 920px;
 	
 	/* image preloader */
-	background: url(/css/padlock.png) no-repeat -9999px -9999px;
+	background: url(padlock.png) no-repeat -9999px -9999px;
 	/* end image preloader */
 	background-color: #FAFAFA;
 	-moz-box-shadow: 0 0 10px 10px #fafafa;
@@ -309,7 +309,7 @@ textarea
 	-moz-box-shadow: inset 0 0 10px 10px #d6f4d8;
 	-webkit-box-shadow: inset 0 0 10px 10px #d6f4d8;
 	box-shadow: inset 0 0 10px 10px #d6f4d8;
-	background: #f9fff9 url(/css/padlock.png) 100% 2px no-repeat;
+	background: #f9fff9 url(padlock.png) 100% 2px no-repeat;
 	color: #909090;
 	overflow: hidden;
 }
@@ -410,7 +410,7 @@ textarea
 	height: 18px;
 	margin-top: 2px;
 	margin-left: 2px;
-	background: #FFF url(/css/line-numbers.png) 0px 1px no-repeat;
+	background: #FFF url(line-numbers.png) 0px 1px no-repeat;
 	border-width: 1px;
 	border-style: SOLID;
 	border-left-color: #dedede;
@@ -436,7 +436,7 @@ textarea
 	height: 18px;
 	margin-top: 2px;
 	margin-left: 2px;
-	background: #FFF url(/css/wrap-lines.png) 0px 1px no-repeat;
+	background: #FFF url(wrap-lines.png) 0px 1px no-repeat;
 	border-width: 1px;
 	border-style: SOLID;
 	border-left-color: #dedede;
@@ -462,7 +462,7 @@ textarea
 	height: 18px;
 	margin-top: 2px;
 	margin-left: 2px;
-	background: #FFF url(/css/full-screen.png) 3px 2px no-repeat;
+	background: #FFF url(full-screen.png) 3px 2px no-repeat;
 	border-width: 1px;
 	border-style: SOLID;
 	border-left-color: #dedede;
@@ -512,7 +512,7 @@ textarea
 	z-index: 100;
 	width: 875px;
 	height: 15px;
-	background: url(/css/decrypting.gif) top left no-repeat;
+	background: url(decrypting.gif) top left no-repeat;
 }
 
 #push
