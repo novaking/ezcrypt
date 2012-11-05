@@ -125,7 +125,7 @@
 			for( $t = floor( log10( $in ) / log10( $base ) ); $t >= 0; $t-- )
 			{
 				$bcp = bcpow( $base, $t );
-				$a = floor( $in / $bcp );
+				$a = (int) floor( $in / $bcp );
 				$out .= $index[$a];
 				$in -= $a * $bcp;
 			}

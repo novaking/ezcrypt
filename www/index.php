@@ -44,7 +44,7 @@
 		}
 		
 		// validate paste, check if password has been set
-		$validated = $pastes->validate_password( $_POST['p'] );
+		$validated = $pastes->validate_password( !empty ($_POST['p']) ? $_POST['p'] : '' );
 		
 		switch( $validated )
 		{
