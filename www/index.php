@@ -39,7 +39,8 @@
 			case EZCRYPT_MISSING_DATA:
 				$template->assign( 'meta_title', 'EZCrypt - Paste does not exist' );
 				$template->assign( 'paste_id', $display_id );
-				die( $template->render( 'nonexistant.tpl' ) );
+				$template->render( 'nonexistant.tpl' );
+				exit;
 				break;
 		}
 		
@@ -54,12 +55,16 @@
 					'data' => str_replace( array( "\r", "\n" ), '', $paste['data'] ),
 					'syntax' => $paste['syntax'],
 				);
-				die( json_encode( $output ) );
+				header("Content-Type: application/json");
+				echo json_encode( $output );
+				exit;
 				break;
 			case EZCRYPT_PASSWORD_FAILED:
 				// incorrect, give the json response an error
 				header( 'HTTP/1.1 403 Forbidden' );
-				die( 'incorrect password, you shouldn\'t be looking at this anyways!' );
+				header("Content-Type: text/plain");
+				echo 'incorrect password, you shouldn\'t be looking at this anyways!';
+				exit;
 				break;
 			case EZCRYPT_PASSWORD_REQUIRED:
 				// prompt user for password
@@ -77,7 +82,8 @@
 			case EZCRYPT_MISSING_DATA:
 				$template->assign( 'meta_title', 'EZCrypt - Paste does not exist' );
 				$template->assign( 'paste_id', $display_id );
-				die( $template->render( 'nonexistant.tpl' ) );
+				$template->render( 'nonexistant.tpl' );
+				exit;
 				break;
 			case EZCRYPT_NO_PASSWORD:
 				// no password, show paste
@@ -88,11 +94,14 @@
 		
 		if( isset( $_GET['raw'] ) )
 		{
-			die( $template->render( 'raw.tpl' ) );
+			header("Content-Type: text/plain");
+			$template->render( 'raw.tpl' );
+			exit;
 		}
 		
 		$template->assign( 'meta_title', 'EZCrypt - Paste' );
-		die( $template->render( 'paste.tpl' ) );
+		$template->render( 'paste.tpl' );
+		exit;
 	}
 	elseif( !empty( $_POST ) )
 	{
@@ -104,7 +113,9 @@
 			'id' => alphaID( $paste, false ),
 		);
 		
-		die( json_encode( $output ) );
+		header("Content-Type: application/json");
+		echo json_encode( $output );
+		exit;
 	}
 	
 	// new paste
