@@ -52,7 +52,7 @@ end
 
 def generateKey(len = 24)
 	chars = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-	len.times.map { chars[SecureRandom.random_number(chars.length)] }.pack('c*')
+	len.times.map { chars[SecureRandom.random_number(chars.length)].ord }.pack('c*')
 end
 
 def decrypt(text, key, opts = {})
