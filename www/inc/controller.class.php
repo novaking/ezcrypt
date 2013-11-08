@@ -108,7 +108,7 @@
 
 			// new paste
 			$template->assign( 'norobots', false );
-			$template->render( 200, 'new.tpl' );
+			$template->render( 200, 'index.tpl' );
 		}
 
 		/* only works with JSON format */
