@@ -10,7 +10,6 @@
  * 
  **/
 var editor; // syntax highlighter
-var ez; // object holder of ezcrypto library
 var _encrypting = null; // used as flag state to determine if encryption is in mid-progress
 
 var __timer_decryption; // time taken to decrypt
@@ -18,18 +17,11 @@ var __timer_encryption; // time taken to encrypt
 var __timer_coloring; // time taken to color syntax
 var __timer_total; // total time taken
 
-// default options for our lazy loader
-$LAB.setGlobalDefaults( {
-	UseLocalXHR: true,
-	AlwaysPreserveOrder: false,
-	AllowDuplicates: true
-} );
-
 $( function() {
 	if( document.getElementById( 'content' ) )
 	{
 		// load up our editor
-		editor = CodeMirror.fromTextArea( document.getElementById( 'content' ), {
+		window.editor = editor = CodeMirror.fromTextArea( document.getElementById( 'content' ), {
 			lineNumbers: true,
 			matchBrackets: false,
 			lineWrapping: false,
@@ -52,7 +44,10 @@ $( function() {
 	// if more text gets entered the trigger will continue resetting as not to cause unwanted CPU usage
 	$( '#text' ).bind( 'textchange', function() {
 		if( _encrypting != null ) { clearTimeout( _encrypting ); _encrypting = null; }
-		_encrypting = setTimeout( '$( \'#result\' ).val( encrypt( $( \'#key\' ).val(), $( \'#text\' ).val() ) ); _encrypting = null', 500 );
+		_encrypting = setTimeout( function() {
+			$( '#result' ).val( encrypt( $( '#key' ).val(), $( '#text' ).val() ) );
+			_encrypting = null;
+		}, 500 );
 	} );
 	
 	$( '#new' ).bind( 'click', function() { $( '#text' ).html( '' ); $( '#result' ).val( '' ); $( '#newpaste' ).slideDown(); } );
@@ -177,7 +172,7 @@ function decrypt( cipher, data )
 	$( '#insertkey' ).hide();
 	// start timer and decrypt
 	timeDiff.setStartTime();
-	var output = ez.aes.decrypt( cipher, data );
+	var output = window.ezcrypt.aes.decrypt( cipher, data );
 	__timer_decryption = timeDiff.getDiff();
 	
 	timeDiff.setStartTime(); // reset timer
@@ -195,7 +190,7 @@ function encrypt( cipher, data )
 {
 	// start timer and encrypt
 	timeDiff.setStartTime();
-	var encrypt = stringBreak( ez.aes.encrypt( cipher, data ), 96 );
+	var encrypt = stringBreak( window.ezcrypt.aes.encrypt( cipher, data ), 96 );
 	__timer_encryption = timeDiff.getDiff();
 	$( '#encrypttime' ).html( 'encryption: ' + __timer_encryption + 'ms');
 	return encrypt;
@@ -250,12 +245,7 @@ function submitData(url)
 	}
 	else if( _encrypting == null && $( '#result' ).val() == '' && $( '#text' ).val() != '' )
 	{
-		// it appears the data hasn't been encrypted yet.
-		// load our crypto library, 'lib' must be defined in core.js
-		ezcrypt( lib, function() {
-			ez = this;
-			$( '#result' ).val( encrypt( $( '#key' ).val(), $( '#text' ).val() ) );
-		} );
+		$( '#result' ).val( encrypt( $( '#key' ).val(), $( '#text' ).val() ) );
 	}
 	else if( _encrypting != null && $( '#text' ).val() != '' )
 	{
@@ -275,7 +265,7 @@ function submitData(url)
 	if( $( '#usepassword' ).is( ':checked' ) )
 	{
 		// if password is used, let's sha the password before we send it over
-		password = ez.sha( $( '#typepassword' ).val() );
+		password = window.ezcrypt.sha( $( '#typepassword' ).val() );
 	}
 	
 	var ttl = $( '#ttl option:selected' ).val();

@@ -2,46 +2,37 @@
 	$this->incl('includes/header.tpl');
 ?>
 	<script type="text/javascript">
-		$( function() {
-			// load our crypto library
-			// lib must be defined in core.js
-			ezcrypt( lib, function() {
-				ez = this;
-	
-				var key = window.location.hash.substring( 1 );
-				var data = $( '#data' ).val();
-				if( key != '' && data != '' )
-				{
-					editor.setValue( decrypt( window.location.hash.substring( 1 ), data ) );
-					$( '#wrapholder' ).show();
-				}
-				else
-				{
-					$( '#typepassword,#typekey' ).live( 'keydown', function( e ) { if( e.keyCode == 13 ) { $( this ).parent().find( 'input[type=button]' ).click(); } } );
-					$( '.cm-s-default' ).parent().hide();
-					$( '#decrypting' ).hide();
+		head.ready(function() { $( function() {
+			var key = window.location.hash.substring( 1 );
+			var data = $( '#data' ).val();
+			if( key != '' && data != '' )
+			{
+				editor.setValue( decrypt( window.location.hash.substring( 1 ), data ) );
+				$( '#wrapholder' ).show();
+			}
+			else
+			{
+				$( '#typepassword,#typekey' ).live( 'keydown', function( e ) { if( e.keyCode == 13 ) { $( this ).parent().find( 'input[type=button]' ).click(); } } );
+				$( '.cm-s-default' ).parent().hide();
+				$( '#decrypting' ).hide();
 <?php
-						if( $require_password )
-						{
-							echo <<< JS
-					$( '#askpassword' ).show();
-					$( '#typepassword' ).focus();
-
-JS;
-						}
-						else
-						{
-							echo <<< JS
+	if( $require_password )
+	{
+?>
+				$( '#askpassword' ).show();
+				$( '#typepassword' ).focus();
+<?php
+	}
+	else
+	{
+?>
 					$( '#insertkey' ).show();
 					$( '#typekey' ).focus();
-
-JS;
-						}
+<?php
+	}
 ?>
-
-				}
-			} );
-		} );
+			}
+		} ); } );
 	</script>
 <?php
 	if( $require_password )

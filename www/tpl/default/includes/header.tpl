@@ -13,35 +13,14 @@
 		<meta http-equiv="pragma" content="no-cache" />
 		<link rel="stylesheet" href="<?=$site_url?>css/styles.min.css" />
 		<link rel="shortcut icon" href="<?=$site_url?>favicon.ico" />
-		
+
 		<!--[if gte IE 9]>
 		<style type="text/css">
 			.gradient { filter: none !important; }
 		</style>
 		<![endif]-->
-	
-		<script type="text/javascript">
-			var lib = '<?php echo ( !empty( $pastes ) ) ? $pastes->get_crypto() : 'CRYPTO_JS'; ?>';
-			
-			// holder object to store jquery commands until jquery is loaded up
-			window.$ = ( function() {
-				var q = [], f = function( cb ) {
-					q.push( cb );
-				};
-				f.attachReady = function( $ ) { 
-					$( function () {
-						$.each( q, function( i, f ) {
-							f.call( document );
-						} );
-						q.length = 0;
-					} );
-					return $;
-				}
-				return f;
-			} )();
-		</script>
-		<script type="text/javascript" src="<?=$site_url?>jslibs/LAB-2.0.3-1.min.js"></script>
-		<script type="text/javascript" src="<?=$site_url?>jslibs/core-0.4-1.min.js"></script>
+
+		<?php $this->incl('includes/javascripts.tpl'); ?>
 	</head>
 	<body>
 		<!--
