@@ -1,6 +1,5 @@
 <?php
-	require dirname( __FILE__ ) . '/includes/header.tpl';
-	
+	$this->incl('includes/header.tpl');
 ?>
 <h1>About EZCrypt</h1>
 <br />
@@ -33,4 +32,4 @@ passive listening, they are detectable.<br />
 <br />
 <br />
 <?php
-	require dirname( __FILE__ ) . '/includes/footer.tpl';
+	$this->incl('includes/footer.tpl');

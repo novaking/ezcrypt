@@ -1,7 +1,6 @@
 <?php
-	include dirname( __FILE__ ) . '/includes/header.tpl';
+	$this->incl('includes/header.tpl');
 ?>
-
 	<script type="text/javascript">
 		$( function() {
 			// load our crypto library
@@ -22,7 +21,7 @@
 					$( '.cm-s-default' ).parent().hide();
 					$( '#decrypting' ).hide();
 <?php
-						if( !empty( $password ) )
+						if( $require_password )
 						{
 							echo <<< JS
 					$( '#askpassword' ).show();
@@ -45,7 +44,7 @@ JS;
 		} );
 	</script>
 <?php
-	if( !empty( $password ) )
+	if( $require_password )
 	{
 ?>
 	<div id="askpassword">
@@ -62,7 +61,7 @@ JS;
 		<input type="button" value="Decrypt" onclick="window.location = '#' + $( '#typekey' ).val(); editor.setValue( decrypt( $( '#typekey' ).val(), $( '#data' ).val() ) );" />
 	</div>
 	<input type="hidden" name="syntax" id="syntax" value="<?=$syntax;?>" />
-	<input type="hidden" name="data" id="data" value="<?=$paste;?>" />
+	<input type="hidden" name="data" id="data" value="<?=$data;?>" />
 	
 	<div id="newpaste">
 		<div style="position: relative;">
@@ -114,4 +113,4 @@ JS;
 		</div>
 	</noscript>
 <?php
-	include dirname( __FILE__ ) . '/includes/footer.tpl';
+	$this->incl('includes/footer.tpl');

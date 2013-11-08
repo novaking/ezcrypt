@@ -15,7 +15,7 @@
 		),
 		
 		'paste' => array(
-			'secret' => '', // set this if you want unidentifiable alphaIds
+			'secret' => '', // set this if you want unidentifiable alphaIds (not really secure)
 		),
 
 		'site' => array(
@@ -23,6 +23,9 @@
 			'source' => 'https://github.com/novaking/ezcrypt',
 			'contact' => 'mailto:contact@ezcrypt.it',
 		),
+
+		'scripturl' => 'https://ezcrypt.it',
+		// 'scripturl' => ( isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'],
 	);
 	$year = gmdate('Y');
 	$__config['site']['footer'] = <<<EOD

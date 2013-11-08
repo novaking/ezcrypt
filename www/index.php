@@ -1,123 +1,44 @@
 <?php
-	require_once dirname( __FILE__ ) . '/inc/config.inc.php';
-	require_once dirname( __FILE__ ) . '/inc/paste.class.php';
-	require_once dirname( __FILE__ ) . '/inc/mobile.class.php';
-	require_once dirname( __FILE__ ) . '/inc/templates.class.php';
-	
-	// This may be required if a user is dealing with a file that is so large that is takes more than 30 seconds
-	set_time_limit( 0 );
-	
-	$conf = get_config(); // load up our config
-	
-	$template = new Template();
-	
-	// detect what device is viewing the page
-	$detect = new Mobile();
-	
-	$template->theme( 'default' );
-	//if( $detect->isMobile() )
-	//	$template->theme( 'mobile' );
-	//elseif( $detect->isTablet() )
-	//	$template->theme( 'tablet' );
-	
-	$template->assign( 'meta_title', 'EZCrypt' );
-	$pastes = new Paste();
-	$template->assign( 'pastes', $pastes );
-	
-	// we are looking for a paste
-	if( !empty( $_GET['id'] ) )
+	require_once dirname( __FILE__ ) . '/inc/controller.class.php';
+
+	$controller = new Controller();
+	$password = !empty ($_REQUEST['p']) ? $_REQUEST['p'] : '';
+
+	if( !empty( $_GET['id'] ) ) {
+		$controller->show( $_GET['id'], $password );
+	}
+	elseif( !empty( $_SERVER['PATH_INFO'] ) )
 	{
-		$display_id = $_GET['id'];
-		
-		$paste = $pastes->get( $display_id );
-		
-		// detect if any errors came through
-		switch( $paste )
+		$parts = array_values( array_filter( explode( '/', $_SERVER['PATH_INFO'] ) ) );
+		if( count( $parts ) >= 1 )
 		{
-			case EZCRYPT_DOES_NOT_EXIST:
-			case EZCRYPT_HAS_EXPIRED:
-			case EZCRYPT_MISSING_DATA:
-				$template->assign( 'meta_title', 'EZCrypt - Paste does not exist' );
-				$template->assign( 'paste_id', $display_id );
-				$template->render( 'nonexistant.tpl' );
-				exit;
+			switch( $parts[0] )
+			{
+			case 'about':
+				$controller->about();
 				break;
+			case 'ezcrypt':
+				$controller->ezcrypt_script();
+				break;
+			case 'p': // "safe" urls working with all paste ids
+				$controller->show( count( $parts ) >= 2 ? $parts[1] : '', $password );
+				break;
+			default: // paste ids that are not "special"
+				$controller->show( $parts[0], $password );
+				break;
+			}
 		}
-		
-		// validate paste, check if password has been set
-		$validated = $pastes->validate_password( !empty ($_POST['p']) ? $_POST['p'] : '' );
-		
-		switch( $validated )
+		else
 		{
-			case EZCRYPT_PASSWORD_SUCCESS:
-				// correct, send user the required data
-				$output = array(
-					'data' => str_replace( array( "\r", "\n" ), '', $paste['data'] ),
-					'syntax' => $paste['syntax'],
-				);
-				header("Content-Type: application/json");
-				echo json_encode( $output );
-				exit;
-				break;
-			case EZCRYPT_PASSWORD_FAILED:
-				// incorrect, give the json response an error
-				header( 'HTTP/1.1 403 Forbidden' );
-				header("Content-Type: text/plain");
-				echo 'incorrect password, you shouldn\'t be looking at this anyways!';
-				exit;
-				break;
-			case EZCRYPT_PASSWORD_REQUIRED:
-				// prompt user for password
-				$template->assign( 'paste', '' );
-				$template->assign( 'syntax', '' );
-				$template->assign( 'password', true );
-				
-				// if a password is required and this is a raw paste
-				// inform the user they are unable to use it.
-				if( isset( $_GET['raw'] ) )
-				{
-					$template->assign( 'paste', 'You can not obtain a raw of this paste as it is password protected.' );
-				}
-				break;
-			case EZCRYPT_MISSING_DATA:
-				$template->assign( 'meta_title', 'EZCrypt - Paste does not exist' );
-				$template->assign( 'paste_id', $display_id );
-				$template->render( 'nonexistant.tpl' );
-				exit;
-				break;
-			case EZCRYPT_NO_PASSWORD:
-				// no password, show paste
-				$template->assign( 'paste', $paste['data'] );
-				$template->assign( 'syntax', $paste['syntax'] );
-				break;
+			$controller->index();
 		}
-		
-		if( isset( $_GET['raw'] ) )
-		{
-			header("Content-Type: text/plain");
-			$template->render( 'raw.tpl' );
-			exit;
-		}
-		
-		$template->assign( 'meta_title', 'EZCrypt - Paste' );
-		$template->render( 'paste.tpl' );
-		exit;
 	}
 	elseif( !empty( $_POST ) )
 	{
 		// new post submission
-		$paste = $pastes->add( $_POST['data'], $_POST['syn'], $_POST['ttl'], $_POST['p'] );
-		
-		// return our new ID to the user
-		$output = array(
-			'id' => alphaID( $paste, false ),
-		);
-		
-		header("Content-Type: application/json");
-		echo json_encode( $output );
-		exit;
+		$controller->post( $_POST['data'], $_POST['syn'], $_POST['ttl'], $_POST['p'] );
 	}
-	
-	// new paste
-	$template->assign( 'norobots', false );
-	$template->render( 'new.tpl' );
+	else
+	{
+		$controller->index();
+	}

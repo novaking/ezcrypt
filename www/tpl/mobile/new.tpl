@@ -1,6 +1,5 @@
 <?php
-	include dirname( __FILE__ ) . '/includes/header.tpl';
-	
+	$this->incl('includes/header.tpl');
 ?>
 
 				<script type="text/javascript">
@@ -43,8 +42,9 @@ KeXrvOb/x8e7UZu+XTOV6xRp25U=';
 						<option value="application/x-aspx"<?=$pastes->selected_syntax('application/x-aspx');?>>&nbsp;&nbsp;ASP.NET</option>
 						<option value="text/x-bash"<?=$pastes->selected_syntax('text/x-bash');?>>&nbsp;&nbsp;Bash</option>
 						<option value="text/x-csrc"<?=$pastes->selected_syntax('text/x-csrc');?>>&nbsp;&nbsp;C</option>
-						<option value="text/x-java"<?=$pastes->selected_syntax('text/x-java');?>>&nbsp;&nbsp;Java</option>
 						<option value="text/x-c++src"<?=$pastes->selected_syntax('text/x-c++src');?>>&nbsp;&nbsp;C++</option>
+						<option value="text/x-csharp"<?=$pastes->selected_syntax('text/x-csharp');?>>&nbsp;&nbsp;C#</option>
+						<option value="text/x-java"<?=$pastes->selected_syntax('text/x-java');?>>&nbsp;&nbsp;Java</option>
 						<option value="text/css"<?=$pastes->selected_syntax('text/css');?>>&nbsp;&nbsp;CSS</option>
 						<option value="htmlmixed"<?=$pastes->selected_syntax('htmlmixed');?>>&nbsp;&nbsp;HTML mixed-mode</option>
 						<option value="text/javascript"<?=$pastes->selected_syntax('text/javascript');?>>&nbsp;&nbsp;JavaScript</option>
@@ -119,4 +119,4 @@ KeXrvOb/x8e7UZu+XTOV6xRp25U=';
 					</div>
 				</noscript>
 <?php
-	include dirname( __FILE__ ) . '/includes/footer.tpl';
+	$this->incl('includes/footer.tpl');

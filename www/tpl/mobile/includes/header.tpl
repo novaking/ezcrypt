@@ -37,8 +37,8 @@
 				return f;
 			} )();
 		</script>
-		<script type="text/javascript" src="<?=$site_url?>inc/jslibs/LAB.min.js"></script>
-		<script type="text/javascript" src="<?=$site_url?>inc/jslibs/core-0.4.min.js"></script>
+		<script type="text/javascript" src="<?=$site_url?>jslibs/LAB-2.0.3-1.min.js"></script>
+		<script type="text/javascript" src="<?=$site_url?>jslibs/core-0.4-1.min.js"></script>
 	</head>
 	<body>
 		<div id="holder">

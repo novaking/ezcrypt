@@ -1,6 +1,5 @@
 <?php
-	include dirname( __FILE__ ) . '/includes/header.tpl';
-	
+	$this->incl('includes/header.tpl');
 ?>
 
 				<script type="text/javascript">
@@ -129,4 +128,4 @@ N0h5DmJUWq33D/BPdbpoHt0IFesJzsgt5dlXPF/zyFeJvDwlKCe3lqfym2f5fJG3YQRV1YqAtEKm9d9E
 					</div>
 				</noscript>
 <?php
-	include dirname( __FILE__ ) . '/includes/footer.tpl';
+	$this->incl('includes/footer.tpl');

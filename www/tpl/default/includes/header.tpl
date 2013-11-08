@@ -40,8 +40,8 @@
 				return f;
 			} )();
 		</script>
-		<script type="text/javascript" src="<?=$site_url?>jslibs/LAB.min.js"></script>
-		<script type="text/javascript" src="<?=$site_url?>jslibs/core-0.4.min.js"></script>
+		<script type="text/javascript" src="<?=$site_url?>jslibs/LAB-2.0.3-1.min.js"></script>
+		<script type="text/javascript" src="<?=$site_url?>jslibs/core-0.4-1.min.js"></script>
 	</head>
 	<body>
 		<!--
@@ -63,6 +63,8 @@
 				<a href="<?=$site_url?>about">About</a>
 				<span class="small">&nbsp;</span>
 				<a href="<?=$site_contact?>">Contact</a>
+				<span class="small">&nbsp;</span>
+				<a href="<?=$site_url?>ezcrypt">Ruby CLI script</a>
 				<span class="small">&nbsp;</span>
 				<a href="<?=$site_source?>" target="_blank">Sourcecode</a>
 				<span class="small">&nbsp;</span>

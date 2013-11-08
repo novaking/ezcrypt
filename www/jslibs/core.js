@@ -3,6 +3,8 @@
  * 
  * @version: 0.4
  * @author: NovaKing (novaking@eztv.se)
+ * @version: 0.4-1
+ * @author: Stefan Bühler
  * 
  * General functions that get used within the website
  * 
@@ -258,7 +260,7 @@ function submitData(url)
 	else if( _encrypting != null && $( '#text' ).val() != '' )
 	{
 		// if still encrypting, test again in 100ms
-		setTimeout( 'submitData()', 100 );
+		setTimeout( submitData.bind(this, url), 100 );
 		return false;
 	}
 	
@@ -297,7 +299,7 @@ function submitData(url)
 			}
 			else
 			{
-				window.location = url + ( ( password != '' ) ? 'p/' : '' ) + json.id + '#' + $( '#key' ).val();
+				window.location = url + 'p/' + json.id + '#' + $( '#key' ).val();
 			}
 		},
 		error: function() {

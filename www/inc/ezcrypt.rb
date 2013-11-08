@@ -111,7 +111,7 @@ OptionParser.new do |o|
 		opts[:pass] = true
 		opts[:password] = password unless password.nil?
 	}
-	o.on('-s', '--site SITE', "Post upload to another ezcrypt pastebin (default: https://ezcrypt.it/)") { |s| opts[:site] = s }
+	o.on('-s', '--site SITE', "Post upload to another ezcrypt pastebin (default: https://ezcrypt.it)") { |s| opts[:site] = s }
 	o.separator ""
 	o.separator "    If neither url nor filename was given, a final parameter can be used to specify it. Urls are autodetected."
 	o.separator ""
@@ -199,7 +199,7 @@ else
 	else
 		text = STDIN.read
 	end
-		
+
 	cipher, key = encrypt(text)
 	resp = http_post(uri, :data => cipher, :syn => opts[:mime] || 'text/plain', :ttl => opts[:ttl] || (7*86400), :p => hashpw(opts[:password]))
 	if 200 != resp.code.to_i

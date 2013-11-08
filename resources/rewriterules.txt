@@ -1,47 +1,27 @@
 ~~~~ Lighttpd 1.4 ~~~~
 
 url.rewrite-once = (
-	# Index
-	"^/?$" => "/index.php",
+	# Static files
+	"^/css/.*" => "$0",
+	"^/jslibs/.*" => "$0",
+	"^/favicon.ico$" => "$0",
 	
-	# Valid URLs
-	"^/css/(.+)$" => "/css/$1",
-	"^/inc/jslibs/(.+)$" => "/inc/jslibs/$1",
-	
-	# About Page
-	"^/about/?$" => "/about.php",
-	
-	# Raw Paste
-	"^/r/(.+){1,}$" => "/index.php?id=$1&raw",
-	# Password Protected Paste
-	"^/p/(.+){1,}$" => "/index.php?id=$1",
-	# Normal Paste
-	"^/(.+){1,}$" => "/index.php?id=$1"
+	# Everything else:
+	".*" => "/index.php$0"
 )
 
 ~~~~ Lighttpd 2.0 ~~~~
 
+docroot "/..."
 if !physical.is_file {
-	rewrite (
-		# About Page
-		"^/about$" => "/about.php",
-
-		# Raw Paste
-		"^/r/(.+){1,}$" => "/index.php?id=$1&raw",
-		# Password Protected Paste
-		"^/p/(.+){1,}$" => "/index.php?id=$1",
-		# Normal Paste
-		"^/(.+){1,}$" => "/index.php?id=$1"
-	);
+	alias "/" => "/.../index.php";
+	path_info;
 }
 
 ~~~~ nginx ~~~~
 
 if (!-e $request_filename) {
-	rewrite ^/about$ /about.php break;
-	rewrite ^/r/(.+){1,}$ /index.php?id=$1&raw break;
-	rewrite ^/p/(.+){1,}$ /index.php?id=$1 break;
-	rewrite ^/(.+){1,}$ /index.php?id=$1 break;
+	rewrite ^.*$ /index.php$0 break;
 }
 
 ~~~~ Apache ~~~~
@@ -50,10 +30,4 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteRule ^/about$ /about.php [L]
-# Raw Paste
-RewriteRule ^/r/(.+){1,}$ /index.php?id=$1&raw [QSA,L]
-# Password Protected Paste
-RewriteRule ^/p/(.+){1,}$ /index.php?id=$1 [QSA,L]
-# Normal Paste
-RewriteRule ^/(.+){1,}$ /index.php?id=$1 [QSA,L]
+RewriteRule ^/.*$ /index.php/$0 [QSA,L]

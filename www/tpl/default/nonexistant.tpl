@@ -1,7 +1,6 @@
 <?php
-	include dirname( __FILE__ ) . '/includes/header.tpl';
-	
+	$this->incl('includes/header.tpl');
 ?>
 Paste does not exist.<br />
 <?php
-	include dirname( __FILE__ ) . '/includes/footer.tpl';
+	$this->incl('includes/footer.tpl');
