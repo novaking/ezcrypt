@@ -6,6 +6,11 @@
 #INCLUDE crypto-js/pbkdf2/pbkdf2.js
 #INCLUDE crypto-js/blockmodes/blockmodes.js
 #INCLUDE crypto-js/aes/aes.js
+#INCLUDE sjcl/core/sjcl.js
+#INCLUDE sjcl/core/aes.js
+#INCLUDE sjcl/core/bitArray.js
+#INCLUDE sjcl/core/sha256.js
+#INCLUDE sjcl/core/random.js
 
 	var b = {
 		decrypt: function(key, block) {
@@ -21,9 +26,19 @@
 		},
 
 		randomKey: function(callback) {
-			var index = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-			var key = '';
-			for( var i = 1; i < 25; i++ ) { key += index[Math.floor( Math.random() * index.length )] };
+			var col_started = false;
+			if (!sjcl.random.isReady()) {
+				if (!sjcl.random._collectorsStarted) {
+					sjcl.random.startCollectors();
+					col_started = true;
+				}
+				setTimeout(function () {
+					b.randomKey(callback);
+					if (col_started) sjcl.random.stopCollectors();
+				}, 200);
+				return;
+			}
+			var key = Crypto.util.bytesToBase64(Crypto.util.wordsToBytes(sjcl.random.randomWords(8)));
 			callback(key);
 		},
 	};

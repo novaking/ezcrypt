@@ -3,13 +3,14 @@
 	case 'PIDCRYPT':
 	case 'AES-128-CBC':
 		$cryptolib = 'pidcrypt-dc66c5af697700ff68da533b35222097be70efc4.min.js';
-		$format = 'AES-128-CBC':
+		$format = 'AES-128-CBC';
 		break;
 	case 'CRYPTO_JS':
-	case 'AES-256-CBC':
+	case 'AES-256-OFB':
 	default:
-		$cryptolib = 'crypto-js-25b52b39294e5fd55e4e56c617d78b1baf0b23e5.min.js';
-		$format = 'AES-256-CBC':
+		$cryptolib = 'sjcl-a4950fcca4b4f1050c822e846f8b63a248b3e54a.min.js';
+		// $cryptolib = 'crypto-js-388cf47bbbca12de0b5671849efd604a6f5fa5aa.min.js';
+		$format = 'AES-256-OFB';
 		break;
 	}
 ?>

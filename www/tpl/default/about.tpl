@@ -6,14 +6,14 @@
 We created EZCrypt because we wanted to give you the power to protect your information from everyone,<br />
 including us! In a typical private pastebin, you upload your data and you trust the security of the<br />
 server and the integrity of it's operators. With EZCrypt, you get a <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">Javascript file</a> which encrypts your<br />
-paste using state of the art <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">AES-128 cipher</a> before it ever leaves your computer!<br />
+paste using state of the art <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">AES-256-OFB cipher</a> before it ever leaves your computer!<br />
 The link to your paste contains the key to decrypt it which you can share with whomever you want.<br />
 <br />
 The decryption key never touches our server and that means if something bad were to happen,<br />
 all of your pastes would still be safe.<br />
 <br />
 <br />
-How it works:<br />
+How it works (replace AES 128bit with 256 bit):<br />
 <br />
 <img src="<?=$site_url?>css/how-it-works.png" width="850" height="328" /><br />
 <br />

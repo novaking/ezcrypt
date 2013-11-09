@@ -19,6 +19,7 @@
 			return pidCrypt.SHA1(text);
 		},
 
+		// not "secure", but pidCrypt should be used only to decode legacy stuff anyway...
 		randomKey: function(callback) {
 			var index = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 			var key = '';

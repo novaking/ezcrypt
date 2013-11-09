@@ -13,5 +13,8 @@
 		sha: function(text) {
 			return window.ezcrypt_backend.sha(text);
 		},
+		randomKey: function(callback) {
+			window.ezcrypt_backend.randomKey(callback);
+		}
 	};
 })();

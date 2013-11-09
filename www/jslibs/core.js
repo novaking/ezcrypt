@@ -32,9 +32,13 @@ $( function() {
 		editor.setOption( 'mode', $( '#syntax' ).val() );
 		editor.focus();
 	}
-	
-	$( '#key' ).val( generateKey() );
-	
+
+	window.ezcrypt.randomKey(function (key) {
+		$( '#key' ).val( key );
+		$( '#en' ).removeAttr( 'disabled' );
+		$( '#en' ).val( 'Submit' );
+	});
+
 	// support ctrl+enter to send paste
 	$( '#text' ).live( 'keydown', function( e ) { if( e.keyCode == 13 && e.ctrlKey ) { $( '#en' ).click(); } } );
 	
@@ -125,15 +129,6 @@ function stringBreak( str, col )
 	return result;
 }
 
-// generate a random key
-function generateKey()
-{
-	var index = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	var key = '';
-	for( var i = 1; i < 25; i++ ) { key += index[Math.floor( Math.random() * index.length )] };
-	return key;
-}
-
 // hover effect when moving mouse over submit button
 function enableHover()
 {
@@ -164,7 +159,7 @@ function onCodeChange( ed, obj )
 }
 
 // simple function wrapper to decryption time can be logged
-function decrypt( cipher, data )
+function decrypt( key, data )
 {
 	// display decrypt buffering image..
 	$( '#decrypting' ).show();
@@ -172,7 +167,7 @@ function decrypt( cipher, data )
 	$( '#insertkey' ).hide();
 	// start timer and decrypt
 	timeDiff.setStartTime();
-	var output = window.ezcrypt.aes.decrypt( cipher, data );
+	var output = window.ezcrypt.aes.decrypt( key, data );
 	__timer_decryption = timeDiff.getDiff();
 	
 	timeDiff.setStartTime(); // reset timer
@@ -186,11 +181,11 @@ function decrypt( cipher, data )
 
 // simple function wrapper to encryption
 // @todo: add timestamp on encrypting?
-function encrypt( cipher, data )
+function encrypt( key, data )
 {
 	// start timer and encrypt
 	timeDiff.setStartTime();
-	var encrypt = stringBreak( window.ezcrypt.aes.encrypt( cipher, data ), 96 );
+	var encrypt = stringBreak( window.ezcrypt.aes.encrypt( key, data ), 96 );
 	__timer_encryption = timeDiff.getDiff();
 	$( '#encrypttime' ).html( 'encryption: ' + __timer_encryption + 'ms');
 	return encrypt;
