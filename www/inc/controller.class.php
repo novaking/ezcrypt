@@ -46,7 +46,7 @@
 			$paste = $pastes->get( $id );
 
 			$template->assign( 'paste_id', $id );
-			$template->assign( 'paste', '' );
+			$template->assign( 'data', '' );
 			$template->assign( 'syntax', '' );
 			$template->assign( 'require_password', false );
 

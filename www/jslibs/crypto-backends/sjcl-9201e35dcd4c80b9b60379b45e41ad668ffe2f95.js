@@ -13,7 +13,7 @@
 
 "use strict";
 /*jslint indent: 2, bitwise: false, nomen: false, plusplus: false, white: false, regexp: false */
-/*global document, window, escape, unescape */
+/*global document, window, escape, unescape, module, require, Uint32Array */
 
 /** @namespace The Stanford Javascript Crypto Library, top-level namespace. */
 var sjcl = {
@@ -45,25 +45,25 @@ var sjcl = {
   
   /** @namespace Exceptions. */
   exception: {
-    /** @class Ciphertext is corrupt. */
+    /** @constructor Ciphertext is corrupt. */
     corrupt: function(message) {
       this.toString = function() { return "CORRUPT: "+this.message; };
       this.message = message;
     },
     
-    /** @class Invalid parameter. */
+    /** @constructor Invalid parameter. */
     invalid: function(message) {
       this.toString = function() { return "INVALID: "+this.message; };
       this.message = message;
     },
     
-    /** @class Bug or missing feature in SJCL. */
+    /** @constructor Bug or missing feature in SJCL. @constructor */
     bug: function(message) {
       this.toString = function() { return "BUG: "+this.message; };
       this.message = message;
     },
 
-    /** @class Something isn't ready. */
+    /** @constructor Something isn't ready. */
     notReady: function(message) {
       this.toString = function() { return "NOT READY: "+this.message; };
       this.message = message;
@@ -71,7 +71,7 @@ var sjcl = {
   }
 };
 
-if(typeof module != 'undefined' && module.exports){
+if(typeof module !== 'undefined' && module.exports){
   module.exports = sjcl;
 }
 /* sjcl/core/aes.js */
@@ -519,12 +519,7 @@ sjcl.codec.base64 = {
       if (x < 0) {
         throw new sjcl.exception.invalid("this isn't base64!");
       }
-      /* must not shift more than 31 bits! */
-      if (bits == 32) {
-        out.push(ta);
-        bits = 6;
-        ta  = x << (32-bits);
-      } else if (bits > 26) {
+      if (bits > 26) {
         bits -= 26;
         out.push(ta ^ x>>>bits);
         ta  = x << (32-bits);
@@ -1163,6 +1158,7 @@ sjcl.hash.sha256.prototype = {
  * @author Emily Stark
  * @author Mike Hamburg
  * @author Dan Boneh
+ * @author Michael Brooks
  */
 
 /** @constructor
@@ -1234,9 +1230,6 @@ sjcl.prng = function(defaultParanoia) {
   this._PARANOIA_LEVELS         = [0,48,64,96,128,192,256,384,512,768,1024];
   this._MILLISECONDS_PER_RESEED = 30000;
   this._BITS_PER_RESEED         = 80;
-
-  this._loadTimeCollector       = this._loadTimeCollector.bind(this);
-  this._mouseCollector          = this._mouseCollector.bind(this);
 };
  
 sjcl.prng.prototype = {
@@ -1402,14 +1395,23 @@ sjcl.prng.prototype = {
   startCollectors: function () {
     if (this._collectorsStarted) { return; }
   
-    if (window.addEventListener) {
-      window.addEventListener("load", this._loadTimeCollector, false);
-      window.addEventListener("mousemove", this._mouseCollector, false);
-    } else if (document.attachEvent) {
-      document.attachEvent("onload", this._loadTimeCollector);
-      document.attachEvent("onmousemove", this._mouseCollector);
+    this._eventListener = {
+      loadTimeCollector: this._bind(this._loadTimeCollector),
+      mouseCollector: this._bind(this._mouseCollector),
+      keyboardCollector: this._bind(this._keyboardCollector),
+      accelerometerCollector: this._bind(this._accelerometerCollector)
     }
-    else {
+
+    if (window.addEventListener) {
+      window.addEventListener("load", this._eventListener.loadTimeCollector, false);
+      window.addEventListener("mousemove", this._eventListener.mouseCollector, false);
+      window.addEventListener("keypress", this._eventListener.keyboardCollector, false);
+      window.addEventListener("devicemotion", this._eventListener.accelerometerCollector, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("onload", this._eventListener.loadTimeCollector);
+      document.attachEvent("onmousemove", this._eventListener.mouseCollector);
+      document.attachEvent("keypress", this._eventListener.keyboardCollector);
+    } else {
       throw new sjcl.exception.bug("can't attach event");
     }
   
@@ -1421,12 +1423,16 @@ sjcl.prng.prototype = {
     if (!this._collectorsStarted) { return; }
   
     if (window.removeEventListener) {
-      window.removeEventListener("load", this._loadTimeCollector, false);
-      window.removeEventListener("mousemove", this._mouseCollector, false);
-    } else if (window.detachEvent) {
-      window.detachEvent("onload", this._loadTimeCollector);
-      window.detachEvent("onmousemove", this._mouseCollector);
+      window.removeEventListener("load", this._eventListener.loadTimeCollector, false);
+      window.removeEventListener("mousemove", this._eventListener.mouseCollector, false);
+      window.removeEventListener("keypress", this._eventListener.keyboardCollector, false);
+      window.removeEventListener("devicemotion", this._eventListener.accelerometerCollector, false);
+    } else if (document.detachEvent) {
+      document.detachEvent("onload", this._eventListener.loadTimeCollector);
+      document.detachEvent("onmousemove", this._eventListener.mouseCollector);
+      document.detachEvent("keypress", this._eventListener.keyboardCollector);
     }
+
     this._collectorsStarted = false;
   },
   
@@ -1443,23 +1449,30 @@ sjcl.prng.prototype = {
   /** remove an event listener for progress or seeded-ness */
   removeEventListener: function (name, cb) {
     var i, j, cbs=this._callbacks[name], jsTemp=[];
-  
+
     /* I'm not sure if this is necessary; in C++, iterating over a
      * collection and modifying it at the same time is a no-no.
      */
-  
+
     for (j in cbs) {
       if (cbs.hasOwnProperty(j) && cbs[j] === cb) {
         jsTemp.push(j);
       }
     }
-  
+
     for (i=0; i<jsTemp.length; i++) {
       j = jsTemp[i];
       delete cbs[j];
     }
   },
   
+  _bind: function (func) {
+    var that = this;
+    return function () {
+      func.apply(that, arguments);
+    };
+  },
+
   /** Generate 4 random words, no reseed, no gate.
    * @private
    */
@@ -1531,6 +1544,10 @@ sjcl.prng.prototype = {
     this._reseed(reseedData);
   },
   
+  _keyboardCollector: function () {
+    this._addCurrentTimeToEntropy(1);
+  },
+  
   _mouseCollector: function (ev) {
     var x = ev.x || ev.clientX || ev.offsetX || 0, y = ev.y || ev.clientY || ev.offsetY || 0;
     sjcl.random.addEntropy([x,y], 2, "mouse");
@@ -1549,7 +1566,16 @@ sjcl.prng.prototype = {
       sjcl.random.addEntropy((new Date()).valueOf(), estimatedEntropy, "loadtime");
     }
   },
-  
+  _accelerometerCollector: function (ev) {
+    var ac = ev.accelerationIncludingGravity.x||ev.accelerationIncludingGravity.y||ev.accelerationIncludingGravity.z;
+    var or = "";
+    if(window.orientation){
+      or = window.orientation;
+    }
+    sjcl.random.addEntropy([ac,or], 3, "accelerometer");
+    this._addCurrentTimeToEntropy(0);
+  },
+
   _fireEvent: function (name, arg) {
     var j, cbs=sjcl.random._callbacks[name], cbsTemp=[];
     /* TODO: there is a race condition between removing collectors and firing them */
@@ -1557,15 +1583,15 @@ sjcl.prng.prototype = {
     /* I'm not sure if this is necessary; in C++, iterating over a
      * collection and modifying it at the same time is a no-no.
      */
-  
+
     for (j in cbs) {
-     if (cbs.hasOwnProperty(j)) {
+      if (cbs.hasOwnProperty(j)) {
         cbsTemp.push(cbs[j]);
-     }
+      }
     }
-  
+
     for (j=0; j<cbsTemp.length; j++) {
-     cbsTemp[j](arg);
+      cbsTemp[j](arg);
     }
   }
 };
@@ -1585,24 +1611,25 @@ sjcl.random = new sjcl.prng(6);
       buf = crypt.randomBytes(1024/8);
       sjcl.random.addEntropy(buf, 1024, "crypto.randomBytes");
 
-    } else if (window) {
+    } else if (window && Uint32Array) {
+      ab = new Uint32Array(32);
       if (window.crypto && window.crypto.getRandomValues) {
-        getRandomValues = window.crypto.getRandomValues;
+        window.crypto.getRandomValues(ab);
       } else if (window.msCrypto && window.msCrypto.getRandomValues) {
-        getRandomValues = window.msCrypto.getRandomValues;
+        window.msCrypto.getRandomValues(ab);
+      } else {
+        return;
       }
 
-      if (getRandomValues) {
-        // get cryptographically strong entropy in Webkit
-        ab = new Uint32Array(32);
-        getRandomValues(ab);
-        sjcl.random.addEntropy(ab, 1024, "crypto.getRandomValues");
-      }
+      // get cryptographically strong entropy in Webkit
+      sjcl.random.addEntropy(ab, 1024, "crypto.getRandomValues");
 
     } else {
       // no getRandomValues :-(
     }
   } catch (e) {
+    console.log("There was an error collecting entropy from the browser:");
+    console.log(e);
     //we do not want the library to fail due to randomness not being maintained.
   }
 }());

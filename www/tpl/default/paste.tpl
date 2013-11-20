@@ -3,12 +3,12 @@
 ?>
 	<script type="text/javascript">
 		head.ready(function() { $( function() {
+			var editor = ezcrypt.editor;
 			var key = window.location.hash.substring( 1 );
 			var data = $( '#data' ).val();
 			if( key != '' && data != '' )
 			{
-				editor.setValue( decrypt( window.location.hash.substring( 1 ), data ) );
-				$( '#wrapholder' ).show();
+				editor.setValue( ezcrypt.decrypt( key, data ) );
 			}
 			else
 			{
@@ -40,8 +40,8 @@
 ?>
 	<div id="askpassword">
 		Enter password:&nbsp;
-		<input type="password" id="typepassword" style="width: 250px;" autocomplete="off" />&nbsp;
-		<input type="button" value="Submit" onclick="requestData( ez.sha( $( '#typepassword' ).val() ) );" />
+		<input type="password" id="typepassword" style="width: 250px;" autocomplete="off"/>&nbsp;
+		<input type="button" id="submitpassword" value="Submit" />
 	</div>
 <?php
 	}

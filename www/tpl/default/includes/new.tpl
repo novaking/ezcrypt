@@ -26,5 +26,5 @@
 	<input type="text" id="typepassword" name="password" style="display: none;" />
 
 	<input type="hidden" id="key" name="key" />
-	<input type="submit" id="en" value="Generating key... (waiting for entropy)" onclick="return submitData('<?=$site_url?>');" style="float: right;" disabled />
+	<input type="submit" id="en" value="Generating key... (waiting for entropy)" style="float: right;" disabled />
 </div>

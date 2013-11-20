@@ -1,5 +1,5 @@
 ﻿///#source 1 1 /src/1.0.0/core.js
-/*! head.core - v1.0.0 */
+/*! head.core - v1.0.2 */
 /*
  * HeadJS     The only script in your <HEAD>
  * Author     Tero Piirainen  (tipiirai)
@@ -50,7 +50,10 @@
     }
 
     function removeClass(name) {
-        var re = new RegExp(" \\b" + name + "\\b");
+        // need to test for both space and no space
+        // https://github.com/headjs/headjs/issues/270
+        // https://github.com/headjs/headjs/issues/226
+        var re = new RegExp(" ?\\b" + name + "\\b");
         html.className = html.className.replace(re, "");
     }
 
@@ -71,6 +74,7 @@
         if (!key) {
             html.className += " " + klass.join(" ");
             klass = [];
+
             return api;
         }
 
@@ -1132,7 +1136,7 @@
     // perform this when DOM is ready
     api.ready(doc, function () {
         // Fix: https://github.com/headjs/headjs/issues/203
-        if (isHeadReady && allLoaded()) {
+        if (allLoaded()) {
             each(handlers.ALL, function (callback) {
                 one(callback);
             });

@@ -28,6 +28,11 @@
 				break;
 			}
 		}
+		elseif( !empty( $_POST ) )
+		{
+			// new post submission
+			$controller->post( $_POST['data'], $_POST['syn'], $_POST['ttl'], $_POST['p'] );
+		}
 		else
 		{
 			$controller->index();

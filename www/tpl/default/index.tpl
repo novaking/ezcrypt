@@ -4,6 +4,7 @@
 
 	<script type="text/javascript">
 		head.ready(function() { $( function() {
+			var editor = ezcrypt.editor;
 			// welcome text that appears on home page encrypted with pidCrypt and crypto-js
 			// you can change this message but simply making a new encrypted text and decrypting
 			// it below
@@ -28,7 +29,7 @@ N0h5DmJUWq33D/BPdbpoHt0IFesJzsgt5dlXPF/zyFeJvDwlKCe3lqfym2f5fJG3YQRV1YqAtEKm9d9E
 			editor.setOption( 'lineNumbers', false );
 			editor.setOption( 'mode', 'application/x-httpd-php' );
 
-			editor.setValue( decrypt( 'MzksNTIsMTU5LDc4LDQ1LDQ1LDEwMSwxMjEsMTY2LDE4LDI4LDE3NSwyMzIsMTU1LDI5LDE1MSw4MCw1MSw1NCwxMTUsMTcsNTgsNjQsMjQxLDI0OSwxNDEsMTk1LDk3LDk0LDcsOSwyNDU=', welcome ) );
+			editor.setValue( ezcrypt.decrypt( 'MzksNTIsMTU5LDc4LDQ1LDQ1LDEwMSwxMjEsMTY2LDE4LDI4LDE3NSwyMzIsMTU1LDI5LDE1MSw4MCw1MSw1NCwxMTUsMTcsNTgsNjQsMjQxLDI0OSwxNDEsMTk1LDk3LDk0LDcsOSwyNDU=', welcome ) );
 		}); });
 	</script>
 
